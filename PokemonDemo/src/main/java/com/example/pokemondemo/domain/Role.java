@@ -30,6 +30,6 @@ public class Role {
     private Integer id;
 
     @Column(nullable = false, unique = true)
-    private Integer name;
+    private String name;
 
 }

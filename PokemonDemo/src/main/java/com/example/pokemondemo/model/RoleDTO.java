@@ -12,6 +12,6 @@ public class RoleDTO {
     private Integer id;
 
     @NotNull
-    private Integer name;
+    private String name;
 
 }

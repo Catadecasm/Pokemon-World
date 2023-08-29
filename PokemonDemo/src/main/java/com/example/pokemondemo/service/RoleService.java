@@ -60,7 +60,7 @@ public class RoleService {
         return role;
     }
 
-    public boolean nameExists(final Integer name) {
+    public boolean nameExists(final String name) {
         return roleRepository.existsByName(name);
     }
 

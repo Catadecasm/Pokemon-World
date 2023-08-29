@@ -1,11 +1,11 @@
 spring:
   datasource:
-    url: ${JDBC_DATABASE_URL:jdbc:sqlserver://localhost;databaseName=my-app}
-    username: ${JDBC_DATABASE_USERNAME:sa}
-    password: ${JDBC_DATABASE_PASSWORD:<<YOUR_PASSWORD>>}
+    url: ${JDBC_DATABASE_URL:jdbc:mysql://localhost:3306/pokemon}
+    username: ${JDBC_DATABASE_USERNAME:root}
+    password: ${JDBC_DATABASE_PASSWORD:Santiago29@}
     dbcp2:
       max-wait-millis: 30000
-      validation-query: select 1
+      validation-query: /* ping */ select 1
       validation-query-timeout: 30
   jpa:
     hibernate:
