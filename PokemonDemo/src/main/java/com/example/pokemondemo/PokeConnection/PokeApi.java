@@ -59,14 +59,13 @@ public class PokeApi implements Connection{
 
     @Override
     public SinglePokemonDTO getPokemon(String name) {
-        url = "https://pokeapi.co/api/v2/pokemon-species/";
+
         try {
             URL connection = new URL(url + name);
-            System.out.println(connection.toString());
             HttpURLConnection con = (HttpURLConnection) connection.openConnection();
             con.setRequestMethod("GET");
             String response = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
-            System.out.println(response);
+            //System.out.println(response);
 /*
             // Parse the response into a JSON object.
             JSONObject jsonObject = new JSONObject(response);
@@ -83,21 +82,30 @@ public class PokeApi implements Connection{
 
     @Override
     public SingleEsPokemonDTO getEsPokemon(int id, String language) {
+        url = "https://pokeapi.co/api/v2/pokemon-species/";
         try {
             URL connection = new URL(url + id);
-            System.out.println(connection.toString());
             HttpURLConnection con = (HttpURLConnection) connection.openConnection();
             con.setRequestMethod("GET");
             String response = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
 
-
             // Parse the response into a JSON object.
             JSONObject jsonObject = new JSONObject(response);
             SingleEsPokemonDTO pokemonDTO = new SingleEsPokemonDTO();
-            pokemonDTO.setName((String) jsonObject.get("name"));
+            JSONArray names = (JSONArray) jsonObject.get("names");
+            for (Object ob : names){
+                JSONObject name = (JSONObject) ob;
+                String lng = (String) name.get("name");
+                if(lng.equals(language)){
+                    pokemonDTO.setName((String) name.get("name"));
+                    break;
+                }
+
+            }
 
 
-            return pokemonDTO;
+
+            return null;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
