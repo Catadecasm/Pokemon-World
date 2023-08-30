@@ -1,6 +1,6 @@
 package com.example.pokemondemo.rest;
 
-import com.example.pokemondemo.model.RoleDTO;
+import com.example.pokemondemo.model.DataBase.RoleDTO;
 import com.example.pokemondemo.service.RoleService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;

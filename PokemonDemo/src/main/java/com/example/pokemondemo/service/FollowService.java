@@ -6,7 +6,7 @@ import java.util.List;
 import com.example.pokemondemo.domain.User;
 import com.example.pokemondemo.util.*;
 import com.example.pokemondemo.domain.Follow;
-import com.example.pokemondemo.model.FollowDTO;
+import com.example.pokemondemo.model.DataBase.FollowDTO;
 import com.example.pokemondemo.repository.FollowRepository;
 import com.example.pokemondemo.repository.UserRepository;
 import org.springframework.data.domain.Sort;

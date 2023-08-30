@@ -4,7 +4,7 @@ import com.example.pokemondemo.domain.League;
 import com.example.pokemondemo.domain.Role;
 import com.example.pokemondemo.util.*;
 import com.example.pokemondemo.domain.User;
-import com.example.pokemondemo.model.UserDTO;
+import com.example.pokemondemo.model.DataBase.UserDTO;
 import com.example.pokemondemo.repository.FightRepository;
 import com.example.pokemondemo.repository.LeagueRepository;
 import com.example.pokemondemo.repository.RoleRepository;

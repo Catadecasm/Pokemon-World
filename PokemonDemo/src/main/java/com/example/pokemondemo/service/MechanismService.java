@@ -3,7 +3,7 @@ package com.example.pokemondemo.service;
 
 import com.example.pokemondemo.domain.Mechanism;
 import com.example.pokemondemo.domain.Pokemon;
-import com.example.pokemondemo.model.MechanismDTO;
+import com.example.pokemondemo.model.DataBase.MechanismDTO;
 import com.example.pokemondemo.repository.MechanismRepository;
 import com.example.pokemondemo.repository.PokemonRepository;
 import com.example.pokemondemo.util.*;

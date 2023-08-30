@@ -3,7 +3,7 @@ package com.example.pokemondemo.service;
 
 import com.example.pokemondemo.domain.Medals;
 import com.example.pokemondemo.domain.User;
-import com.example.pokemondemo.model.MedalsDTO;
+import com.example.pokemondemo.model.DataBase.MedalsDTO;
 import com.example.pokemondemo.repository.MedalsRepository;
 import com.example.pokemondemo.repository.UserRepository;
 import com.example.pokemondemo.util.*;

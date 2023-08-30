@@ -2,7 +2,7 @@ package com.example.pokemondemo.service;
 
 
 import com.example.pokemondemo.domain.League;
-import com.example.pokemondemo.model.LeagueDTO;
+import com.example.pokemondemo.model.DataBase.LeagueDTO;
 import com.example.pokemondemo.repository.LeagueRepository;
 import com.example.pokemondemo.util.*;
 import java.util.List;

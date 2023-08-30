@@ -1,6 +1,6 @@
 package com.example.pokemondemo.rest;
 
-import com.example.pokemondemo.model.UserDTO;
+import com.example.pokemondemo.model.DataBase.UserDTO;
 import com.example.pokemondemo.service.UserService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;

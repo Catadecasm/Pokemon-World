@@ -1,6 +1,6 @@
 package com.example.pokemondemo.rest;
 
-import com.example.pokemondemo.model.FightDTO;
+import com.example.pokemondemo.model.DataBase.FightDTO;
 import com.example.pokemondemo.service.FightService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;

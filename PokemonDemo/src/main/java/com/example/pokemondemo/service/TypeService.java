@@ -6,7 +6,7 @@ import java.util.List;
 import com.example.pokemondemo.domain.Pokemon;
 import com.example.pokemondemo.util.*;
 import com.example.pokemondemo.domain.Type;
-import com.example.pokemondemo.model.TypeDTO;
+import com.example.pokemondemo.model.DataBase.TypeDTO;
 import com.example.pokemondemo.repository.PokemonRepository;
 import com.example.pokemondemo.repository.TypeRepository;
 import org.springframework.data.domain.Sort;

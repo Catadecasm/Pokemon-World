@@ -4,7 +4,7 @@ package com.example.pokemondemo.service;
 import java.util.List;
 import com.example.pokemondemo.util.*;
 import com.example.pokemondemo.domain.Role;
-import com.example.pokemondemo.model.RoleDTO;
+import com.example.pokemondemo.model.DataBase.RoleDTO;
 import com.example.pokemondemo.repository.RoleRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

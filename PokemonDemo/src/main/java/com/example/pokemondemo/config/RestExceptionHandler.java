@@ -1,8 +1,8 @@
 package com.example.pokemondemo.config;
 
 import com.example.pokemondemo.util.NotFoundException;
-import com.example.pokemondemo.model.ErrorResponse;
-import com.example.pokemondemo.model.FieldError;
+import com.example.pokemondemo.model.DataBase.ErrorResponse;
+import com.example.pokemondemo.model.DataBase.FieldError;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.List;

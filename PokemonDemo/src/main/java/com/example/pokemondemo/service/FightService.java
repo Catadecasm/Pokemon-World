@@ -6,7 +6,7 @@ import com.example.pokemondemo.domain.User;
 import com.example.pokemondemo.repository.FightRepository;
 import com.example.pokemondemo.repository.UserRepository;
 import com.example.pokemondemo.util.*;
-import com.example.pokemondemo.model.FightDTO;
+import com.example.pokemondemo.model.DataBase.FightDTO;
 import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;

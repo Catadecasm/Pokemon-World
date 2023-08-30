@@ -1,4 +1,4 @@
-package com.example.pokemondemo.model;
+package com.example.pokemondemo.model.DataBase;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.example.pokemondemo.model;
+package com.example.pokemondemo.model.DataBase;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -8,15 +8,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MedalsDTO {
+public class TypeDTO {
 
     private Integer id;
 
     @NotNull
     @Size(max = 255)
-    private String title;
+    private String name;
 
     @NotNull
-    private Integer user;
+    private Integer pokemonid;
 
 }
