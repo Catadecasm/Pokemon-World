@@ -1,6 +1,6 @@
 package com.example.pokemondemo.ConfigAuth;
-
-import org.springframework.context.annotation.ComponentScan;
+import com.example.pokemondemo.User.UserRepository2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,8 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.example.pokemondemo.User.UserRepository;
-
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +18,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private final UserRepository2 userRepository2;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception
@@ -44,8 +43,7 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailService() {
-        return username -> userRepository.findByUsername(username)
+        return username -> userRepository2.findByUsername(username)
                 .orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
-
 }
