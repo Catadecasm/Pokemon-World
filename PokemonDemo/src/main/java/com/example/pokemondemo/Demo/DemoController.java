@@ -12,7 +12,7 @@ public class DemoController {
     @PostMapping(value = "demo")
     public String welcome()
     {
-        return "Welcome from secure endpoint";
+        return "Welcome from a secure endpoint";
     }
 }
 
