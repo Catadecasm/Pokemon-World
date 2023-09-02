@@ -35,6 +35,7 @@ public class Mechanism {
     @Column(nullable = false)
     private String name;
 
+    //Remove
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pokemonid_id", nullable = false)
     private Pokemon pokemonid;

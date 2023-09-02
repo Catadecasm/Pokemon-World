@@ -49,6 +49,7 @@ public class Pokemon {
     @OneToMany(mappedBy = "pokemonid")
     private Set<Type> pokemonidTypes;
 
+    //Delete user from pokemon
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
