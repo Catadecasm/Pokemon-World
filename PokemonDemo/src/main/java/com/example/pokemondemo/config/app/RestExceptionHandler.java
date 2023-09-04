@@ -1,4 +1,4 @@
-package com.example.pokemondemo.config;
+package com.example.pokemondemo.config.app;
 
 import com.example.pokemondemo.util.NotFoundException;
 import com.example.pokemondemo.model.DataBase.ErrorResponse;

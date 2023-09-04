@@ -1,4 +1,4 @@
-package com.example.pokemondemo.config;
+package com.example.pokemondemo.config.app;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;

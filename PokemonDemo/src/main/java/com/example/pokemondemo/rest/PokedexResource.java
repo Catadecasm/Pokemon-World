@@ -1,8 +1,8 @@
 package com.example.pokemondemo.rest;
 
-import com.example.pokemondemo.PokeConnection.Impl.EvolutionChainService;
-import com.example.pokemondemo.PokeConnection.Impl.PokedexPokemonService;
-import com.example.pokemondemo.PokeConnection.Impl.PokedexPokemonSpecService;
+import com.example.pokemondemo.pokeConnection.Impl.EvolutionChainService;
+import com.example.pokemondemo.pokeConnection.Impl.PokedexPokemonService;
+import com.example.pokemondemo.pokeConnection.Impl.PokedexPokemonSpecService;
 import com.example.pokemondemo.model.PokeApi.EvolutionChainDTO;
 import com.example.pokemondemo.model.PokeApi.PokedexDashboardDTO;
 import com.example.pokemondemo.model.PokeApi.SingleEsPokemonDTO;

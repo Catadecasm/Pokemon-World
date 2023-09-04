@@ -1,4 +1,4 @@
-package com.example.pokemondemo.PokeConnection.URL;
+package com.example.pokemondemo.pokeConnection.URL;
 
 public class Constants {
     public static final String POKEMON_URL = "https://pokeapi.co/api/v2/pokemon/";

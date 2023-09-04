@@ -1,6 +1,6 @@
-package com.example.pokemondemo.PokeConnection.Impl;
+package com.example.pokemondemo.pokeConnection.Impl;
 
-import com.example.pokemondemo.PokeConnection.Intf.EvolutionChain;
+import com.example.pokemondemo.pokeConnection.Intf.EvolutionChain;
 import com.example.pokemondemo.model.PokeApi.EvolutionChainDTO;
 import com.example.pokemondemo.model.PokeApi.EvolutionDTO;
 import org.json.JSONArray;
@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-import static com.example.pokemondemo.PokeConnection.URL.Constants.*;
+import static com.example.pokemondemo.pokeConnection.URL.Constants.*;
 
 @Service
 public class EvolutionChainService implements EvolutionChain {

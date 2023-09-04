@@ -1,7 +1,11 @@
 package com.example.pokemondemo.rest;
 
 import com.example.pokemondemo.model.DataBase.UserDTO;
-import com.example.pokemondemo.service.UserService;
+import com.example.pokemondemo.model.authDTO.request.LogInRequest;
+import com.example.pokemondemo.model.authDTO.request.SingUpRequest;
+import com.example.pokemondemo.model.authDTO.response.LogInResponse;
+import com.example.pokemondemo.model.authDTO.response.SingUpResponse;
+import com.example.pokemondemo.service.app.UserService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -27,6 +31,23 @@ public class UserResource {
     public UserResource(final UserService userService) {
         this.userService = userService;
     }
+
+    @PostMapping("/SingUp")
+    public ResponseEntity<?> signUpUser(@RequestBody SingUpRequest singUpRequest){
+        return ResponseEntity.ok(userService.signUpUser(singUpRequest));
+    }
+
+    @PostMapping("/LogIn")
+    public ResponseEntity<LogInResponse> logInUser(@RequestBody LogInRequest logInRequest) {
+        return ResponseEntity.ok(userService.logInUser(logInRequest));
+    }
+
+/*
+    @PostMapping("/LogOut")
+    public ResponseEntity<?> LogOutUser(@RequestBody LogInRequest singUpRequest){
+        return ResponseEntity.ok(userService.logOutUser(singUpRequest));
+    }
+*/
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {

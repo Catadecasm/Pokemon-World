@@ -1,7 +1,7 @@
 package com.example.pokemondemo.rest;
 
 import com.example.pokemondemo.model.DataBase.LeagueDTO;
-import com.example.pokemondemo.service.LeagueService;
+import com.example.pokemondemo.service.app.LeagueService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;

@@ -25,7 +25,7 @@ public class UserDTO {
     private String username;
 
     @NotNull
-    private Integer role;
+    private String role;
 
     @NotNull
     private Integer leagueid;

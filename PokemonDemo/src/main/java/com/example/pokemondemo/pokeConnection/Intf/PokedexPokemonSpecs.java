@@ -1,4 +1,4 @@
-package com.example.pokemondemo.PokeConnection.Intf;
+package com.example.pokemondemo.pokeConnection.Intf;
 
 import com.example.pokemondemo.model.PokeApi.SingleEsPokemonDTO;
 

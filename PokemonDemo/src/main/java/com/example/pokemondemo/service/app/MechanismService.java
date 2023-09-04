@@ -1,4 +1,4 @@
-package com.example.pokemondemo.service;
+package com.example.pokemondemo.service.app;
 
 
 import com.example.pokemondemo.domain.Mechanism;

@@ -1,6 +1,6 @@
-package com.example.pokemondemo.PokeConnection.Impl;
+package com.example.pokemondemo.pokeConnection.Impl;
 
-import com.example.pokemondemo.PokeConnection.Intf.PokedexPokemon;
+import com.example.pokemondemo.pokeConnection.Intf.PokedexPokemon;
 import com.example.pokemondemo.model.PokeApi.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,7 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.example.pokemondemo.PokeConnection.URL.Constants.POKEMON_URL;
+import static com.example.pokemondemo.pokeConnection.URL.Constants.POKEMON_URL;
 
 @Service
 public class PokedexPokemonService implements PokedexPokemon {

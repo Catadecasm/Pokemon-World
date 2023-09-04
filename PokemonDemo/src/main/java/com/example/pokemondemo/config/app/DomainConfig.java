@@ -1,4 +1,4 @@
-package com.example.pokemondemo.config;
+package com.example.pokemondemo.config.app;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;

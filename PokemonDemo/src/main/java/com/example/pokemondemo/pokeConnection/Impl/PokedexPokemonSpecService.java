@@ -1,6 +1,6 @@
-package com.example.pokemondemo.PokeConnection.Impl;
+package com.example.pokemondemo.pokeConnection.Impl;
 
-import com.example.pokemondemo.PokeConnection.Intf.PokedexPokemonSpecs;
+import com.example.pokemondemo.pokeConnection.Intf.PokedexPokemonSpecs;
 import com.example.pokemondemo.model.PokeApi.AbilitiesDTO;
 import com.example.pokemondemo.model.PokeApi.SingleEsPokemonDTO;
 import org.json.JSONArray;
@@ -15,8 +15,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.example.pokemondemo.PokeConnection.URL.Constants.POKEMON_SPECIES_URL;
-import static com.example.pokemondemo.PokeConnection.URL.Constants.POKEMON_URL;
+import static com.example.pokemondemo.pokeConnection.URL.Constants.POKEMON_SPECIES_URL;
+import static com.example.pokemondemo.pokeConnection.URL.Constants.POKEMON_URL;
 
 @Service
 public class PokedexPokemonSpecService implements PokedexPokemonSpecs {
