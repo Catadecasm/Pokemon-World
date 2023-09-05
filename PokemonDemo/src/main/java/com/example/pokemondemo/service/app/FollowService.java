@@ -4,7 +4,7 @@ package com.example.pokemondemo.service.app;
 import java.util.Optional;
 
 import com.example.pokemondemo.domain.User;
-import com.example.pokemondemo.model.profilePayload.response.FollowResponse;
+import com.example.pokemondemo.model.profilePayload.response.ClassicResponse;
 import com.example.pokemondemo.util.*;
 import com.example.pokemondemo.domain.Follow;
 import com.example.pokemondemo.repository.FollowRepository;
@@ -24,7 +24,7 @@ public class FollowService {
         this.userRepository = userRepository;
     }
 
-    public FollowResponse follow(String userEmail, String userToFollow) {
+    public ClassicResponse follow(String userEmail, String userToFollow) {
 
         Optional<User> userFollower = userRepository.findByEmailIgnoreCase(userEmail);
         User userFollowed = userRepository.findByUsernameIgnoreCase(userToFollow);
@@ -37,13 +37,13 @@ public class FollowService {
         follow.setFollower(user);
         follow.setFollowed(userFollowed);
         followRepository.save(follow);
-        return FollowResponse.builder()
+        return ClassicResponse.builder()
                 .ResponseCode("OK")
                 .ResponseMessage(user.getRealUsername() + " is now following " + userFollowed.getRealUsername())
                 .build();
     }
 
-    public FollowResponse unfollow(String userEmail, String username) {
+    public ClassicResponse unfollow(String userEmail, String username) {
         Optional<User> userFollower = userRepository.findByEmailIgnoreCase(userEmail);
         User userFollowed = userRepository.findByUsernameIgnoreCase(username);
         if (userFollowed == null) {
@@ -55,7 +55,7 @@ public class FollowService {
         }
         followRepository.delete(follow);
 
-        return FollowResponse.builder()
+        return ClassicResponse.builder()
                 .ResponseCode("OK")
                 .ResponseMessage(userFollower.get().getRealUsername() + " is not following " + userFollowed.getRealUsername() + " anymore")
                 .build();

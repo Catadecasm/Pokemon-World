@@ -20,6 +20,10 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,14 +38,18 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
+    private User authenticatedUser;
+    private final UserDetailsService userDetailsService;
 
-    public UserService(final UserRepository userRepository, final LeagueRepository leagueRepository, final FightRepository fightRepository, PasswordEncoder passwordEncoder, JWTService jwtService, AuthenticationManager authenticationManager) {
+
+    public UserService(final UserRepository userRepository, final LeagueRepository leagueRepository, final FightRepository fightRepository, PasswordEncoder passwordEncoder, JWTService jwtService, AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
         this.userRepository = userRepository;
         this.leagueRepository = leagueRepository;
         this.fightRepository = fightRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
     }
 
     public SingUpResponse signUpUser(SingUpRequest signUpRequest) {
@@ -86,12 +94,18 @@ public class UserService {
     }
 
     public LogInResponse logInUser(LogInRequest logInRequest) {
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken
                         (logInRequest.getEmail()
-                        , logInRequest.getPassword()));
+                                , logInRequest.getPassword()));
+
         User user = userRepository.findByEmailIgnoreCase(logInRequest.getEmail())
                 .orElseThrow((NotFoundException::new));
+
+        User authenticatedUserObject = (User) authentication.getPrincipal();
+        authenticatedUserObject.setLogged(true);
+        this.authenticatedUser = authenticatedUserObject;
+
         var token = jwtService.generateToken(user);
         return LogInResponse.builder()
                 .id(user.getId())
@@ -101,8 +115,33 @@ public class UserService {
                 .build();
     }
 
-    public LogOutResponse logOutUser(LogInRequest singUpRequest) {
-        return null;
+    public LogOutResponse logOutUser(String token) {
+        LogOutResponse logInResponse = null;
+        if (this.authenticatedUser == null || !this.authenticatedUser.isLogged()) {
+            return logInResponse;
+        }
+        if (token != null && SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+            String userEmail = jwtService.getUserEmail(token);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+            if (userDetails != null) {
+                boolean isLogoutAdmitted = userEmail.equalsIgnoreCase(
+                        String.valueOf(this.authenticatedUser.getEmail()));
+                if (isLogoutAdmitted) {
+                    User user = userRepository.findByEmailIgnoreCase(userEmail)
+                            .orElseThrow((NotFoundException::new));
+                    user.setLogged(false);
+                    userRepository.save(user);
+                    logInResponse = new LogOutResponse("ok");
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                    authentication.setAuthenticated(false);
+                    this.authenticatedUser.setLogged(false);
+                }
+            }
+        }
+        return logInResponse;
     }
 
     // CRUD operations
@@ -166,7 +205,4 @@ public class UserService {
     public boolean usernameExists(final String username) {
         return userRepository.existsByUsernameIgnoreCase(username);
     }
-
-
-
 }

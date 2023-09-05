@@ -33,20 +33,15 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("/api/users/SingUp").permitAll()
-                                .requestMatchers("/api/users/LogIn").permitAll()
+                                .requestMatchers("/api/users/singup").permitAll()
+                                .requestMatchers("/api/users/login").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->
                         sessionManager
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout(logout ->
-                        logout
-                                .logoutUrl("/api/users/LogOut")
-                                .addLogoutHandler(new SecurityContextLogoutHandler())
-                                .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext())));
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

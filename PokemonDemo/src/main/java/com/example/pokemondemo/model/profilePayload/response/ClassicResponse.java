@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FollowResponse {
+public class ClassicResponse {
     private String ResponseCode;
     private String ResponseMessage;
 }

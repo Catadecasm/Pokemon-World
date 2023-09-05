@@ -1,5 +1,7 @@
 package com.example.pokemondemo.config.security;
 
+import com.example.pokemondemo.domain.User;
+import com.example.pokemondemo.repository.UserRepository;
 import com.example.pokemondemo.service.security.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,6 +24,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
+    private final UserRepository userRepository;
     private final UserDetailsService userDetailsService;
 
 
@@ -40,7 +43,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         jwt = header.substring(7);
         userEmail = jwtService.getUserEmail(jwt);
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        User user = userRepository.findByEmailIgnoreCase(userEmail).get();
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null && user.isLogged() ) {
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             if(jwtService.isTokenValid(jwt, userDetails)) {
@@ -50,7 +54,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-
         }
         filterChain.doFilter(request, response);
     }

@@ -28,35 +28,5 @@ public class PokemonResource {
         this.pokemonService = pokemonService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<PokemonDTO>> getAllPokemons() {
-        return ResponseEntity.ok(pokemonService.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<PokemonDTO> getPokemon(@PathVariable(name = "id") final Integer id) {
-        return ResponseEntity.ok(pokemonService.get(id));
-    }
-
-    @PostMapping
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<Integer> createPokemon(@RequestBody @Valid final PokemonDTO pokemonDTO) {
-        final Integer createdId = pokemonService.create(pokemonDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Integer> updatePokemon(@PathVariable(name = "id") final Integer id,
-            @RequestBody @Valid final PokemonDTO pokemonDTO) {
-        pokemonService.update(id, pokemonDTO);
-        return ResponseEntity.ok(id);
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deletePokemon(@PathVariable(name = "id") final Integer id) {
-        pokemonService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
 
 }

@@ -38,6 +38,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(nullable = false)
+    private boolean isLogged;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leagueid_id", nullable = false)
     private League leagueid;
