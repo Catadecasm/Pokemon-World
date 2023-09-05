@@ -100,10 +100,10 @@ public class UserService {
                 .token(token)
                 .build();
     }
-/*
-    public LogOutResponse logOutUser(LogInRequest singUpRequest) {
 
-    }*/
+    public LogOutResponse logOutUser(LogInRequest singUpRequest) {
+        return null;
+    }
 
     // CRUD operations
     public List<UserDTO> findAll() {

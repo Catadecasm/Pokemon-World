@@ -1,15 +1,14 @@
 package com.example.pokemondemo.service.app;
 
 
-import java.util.List;
+import java.util.Optional;
 
 import com.example.pokemondemo.domain.User;
+import com.example.pokemondemo.model.profilePayload.response.FollowResponse;
 import com.example.pokemondemo.util.*;
 import com.example.pokemondemo.domain.Follow;
-import com.example.pokemondemo.model.DataBase.FollowDTO;
 import com.example.pokemondemo.repository.FollowRepository;
 import com.example.pokemondemo.repository.UserRepository;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -20,56 +19,46 @@ public class FollowService {
     private final UserRepository userRepository;
 
     public FollowService(final FollowRepository followRepository,
-            final UserRepository userRepository) {
+                         final UserRepository userRepository) {
         this.followRepository = followRepository;
         this.userRepository = userRepository;
     }
 
-    public List<FollowDTO> findAll() {
-        final List<Follow> follows = followRepository.findAll(Sort.by("id"));
-        return follows.stream()
-                .map(follow -> mapToDTO(follow, new FollowDTO()))
-                .toList();
-    }
+    public FollowResponse follow(String userEmail, String userToFollow) {
 
-    public FollowDTO get(final Integer id) {
-        return followRepository.findById(id)
-                .map(follow -> mapToDTO(follow, new FollowDTO()))
-                .orElseThrow(NotFoundException::new);
-    }
+        Optional<User> userFollower = userRepository.findByEmailIgnoreCase(userEmail);
+        User userFollowed = userRepository.findByUsernameIgnoreCase(userToFollow);
+        if (userFollowed == null) {
+            throw new NotFoundException("The trainer does not exist");
+        }
 
-    public Integer create(final FollowDTO followDTO) {
-        final Follow follow = new Follow();
-        mapToEntity(followDTO, follow);
-        return followRepository.save(follow).getId();
-    }
-
-    public void update(final Integer id, final FollowDTO followDTO) {
-        final Follow follow = followRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
-        mapToEntity(followDTO, follow);
+        User user = userFollower.get();
+        Follow follow = new Follow();
+        follow.setFollower(user);
+        follow.setFollowed(userFollowed);
         followRepository.save(follow);
+        return FollowResponse.builder()
+                .ResponseCode("OK")
+                .ResponseMessage(user.getRealUsername() + " is now following " + userFollowed.getRealUsername())
+                .build();
     }
 
-    public void delete(final Integer id) {
-        followRepository.deleteById(id);
-    }
+    public FollowResponse unfollow(String userEmail, String username) {
+        Optional<User> userFollower = userRepository.findByEmailIgnoreCase(userEmail);
+        User userFollowed = userRepository.findByUsernameIgnoreCase(username);
+        if (userFollowed == null) {
+            throw new NotFoundException("The trainer does not exist");
+        }
+        Follow follow = followRepository.findFollowByFollowedAndFollower(userFollowed, userFollower.get());
+        if(follow == null){
+            throw new NotFoundException("The trainer is not followed by you");
+        }
+        followRepository.delete(follow);
 
-    private FollowDTO mapToDTO(final Follow follow, final FollowDTO followDTO) {
-        followDTO.setId(follow.getId());
-        followDTO.setFollowed(follow.getFollowed() == null ? null : follow.getFollowed().getId());
-        followDTO.setFollower(follow.getFollower() == null ? null : follow.getFollower().getId());
-        return followDTO;
-    }
-
-    private Follow mapToEntity(final FollowDTO followDTO, final Follow follow) {
-        final User followed = followDTO.getFollowed() == null ? null : userRepository.findById(followDTO.getFollowed())
-                .orElseThrow(() -> new NotFoundException("followed not found"));
-        follow.setFollowed(followed);
-        final User follower = followDTO.getFollower() == null ? null : userRepository.findById(followDTO.getFollower())
-                .orElseThrow(() -> new NotFoundException("follower not found"));
-        follow.setFollower(follower);
-        return follow;
+        return FollowResponse.builder()
+                .ResponseCode("OK")
+                .ResponseMessage(userFollower.get().getRealUsername() + " is not following " + userFollowed.getRealUsername() + " anymore")
+                .build();
     }
 
 }

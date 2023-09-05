@@ -1,10 +1,16 @@
 package com.example.pokemondemo.rest;
 
 import com.example.pokemondemo.model.DataBase.FollowDTO;
+import com.example.pokemondemo.model.profilePayload.request.ActionDTO;
 import com.example.pokemondemo.service.app.FollowService;
+import com.example.pokemondemo.service.security.JWTService;
+import com.example.pokemondemo.util.NotFoundException;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+
 import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,40 +29,36 @@ import org.springframework.web.bind.annotation.RestController;
 public class FollowResource {
 
     private final FollowService followService;
+    private final JWTService jwtService;
 
-    public FollowResource(final FollowService followService) {
+    public FollowResource(final FollowService followService, JWTService jwtService) {
         this.followService = followService;
+        this.jwtService = jwtService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<FollowDTO>> getAllFollows() {
-        return ResponseEntity.ok(followService.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<FollowDTO> getFollow(@PathVariable(name = "id") final Integer id) {
-        return ResponseEntity.ok(followService.get(id));
-    }
-
-    @PostMapping
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<Integer> createFollow(@RequestBody @Valid final FollowDTO followDTO) {
-        final Integer createdId = followService.create(followDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Integer> updateFollow(@PathVariable(name = "id") final Integer id,
-            @RequestBody @Valid final FollowDTO followDTO) {
-        followService.update(id, followDTO);
-        return ResponseEntity.ok(id);
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteFollow(@PathVariable(name = "id") final Integer id) {
-        followService.delete(id);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/{username}/relationship")
+    public ResponseEntity<?> followAndUnfollow(@RequestBody ActionDTO msg, HttpServletRequest request, @PathVariable(name = "username") String username) {
+        String header = request.getHeader("Authorization");
+        String jwt = header.substring(7);
+        String userEmail = jwtService.getUserEmail(jwt);
+        if (userEmail != null) {
+            if (msg.getAction().equals("follow")) {
+                try {
+                    return ResponseEntity.ok(followService.follow(userEmail, username));
+                } catch (NotFoundException e) {
+                    return ResponseEntity.badRequest().body(e.getMessage());
+                }
+            } else if (msg.getAction().equals("unfollow")) {
+                try {
+                    return ResponseEntity.ok(followService.unfollow(userEmail, username));
+                } catch (NotFoundException e) {
+                    return ResponseEntity.badRequest().body(e.getMessage());
+                }
+            } else {
+                return ResponseEntity.badRequest().body("Action not found");
+            }
+        }
+        return ResponseEntity.badRequest().body("User not found");
     }
 
 }
