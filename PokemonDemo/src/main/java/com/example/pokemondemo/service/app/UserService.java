@@ -6,6 +6,8 @@ import com.example.pokemondemo.model.authDTO.request.SingUpRequest;
 import com.example.pokemondemo.model.authDTO.response.LogInResponse;
 import com.example.pokemondemo.model.authDTO.response.LogOutResponse;
 import com.example.pokemondemo.model.authDTO.response.SingUpResponse;
+import com.example.pokemondemo.model.profilePayload.request.ChangeRoleDTO;
+import com.example.pokemondemo.model.profilePayload.response.ClassicResponse;
 import com.example.pokemondemo.service.security.JWTService;
 import com.example.pokemondemo.util.*;
 import com.example.pokemondemo.model.DataBase.UserDTO;
@@ -84,10 +86,10 @@ public class UserService {
         switch (role) {
             case "ADMIN":
                 return Role.ADMIN;
-            case "TRAINER":
-                return Role.TRAINER;
             case "DOCTOR":
                 return Role.DOCTOR;
+            case "PROFESSOR":
+                return Role.PROFESSOR;
             default:
                 return Role.TRAINER;
         }
@@ -142,6 +144,33 @@ public class UserService {
             }
         }
         return logInResponse;
+    }
+
+    public ClassicResponse changeRole(String emailUser, ChangeRoleDTO changeRoleDTO) {
+
+        User user = userRepository.findByEmailIgnoreCase(emailUser).get();
+        if (user.getRole().equals(Role.ADMIN)) {
+
+            User userToChange = userRepository.findByUsernameIgnoreCase(changeRoleDTO.getUsername());
+            if (userToChange == null) {
+                throw new NotFoundException("The trainer does not exist");
+            }
+            if (userToChange.getRole().name().equals(changeRoleDTO.getRole())) {
+                throw new NotFoundException("The trainer already has this role");
+            }
+            try {
+                Role role = Role.valueOf(changeRoleDTO.getRole());
+            } catch (IllegalArgumentException e) {
+                throw new NotFoundException("The role does not exist");
+            }
+            userToChange.setRole(DefineRole(changeRoleDTO.getRole()));
+            userRepository.save(userToChange);
+            return ClassicResponse.builder()
+                    .ResponseCode("200")
+                    .ResponseMessage("Role updated successfully")
+                    .build();
+        }
+        throw new NotFoundException("You don't have not provided adequate credentials to access this resource");
     }
 
     // CRUD operations
