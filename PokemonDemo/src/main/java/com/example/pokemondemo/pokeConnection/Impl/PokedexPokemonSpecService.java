@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -110,17 +111,6 @@ public class PokedexPokemonSpecService implements PokedexPokemonSpecs {
                 }
                 pokemonDTO.getAbilities().add(abilitiesDTO);
             }
-            JSONObject prueba = new JSONObject();
-            prueba.put("abilities",pokemonDTO.getAbilities());
-            prueba.put("stats",pokemonDTO.getStats());
-            prueba.put("type",pokemonDTO.getType());
-            prueba.put("description",pokemonDTO.getDescription());
-            prueba.put("img_path",pokemonDTO.getImg_path());
-            prueba.put("language",pokemonDTO.getLanguage());
-            prueba.put("index",pokemonDTO.getIndex());
-            prueba.put("name",pokemonDTO.getName());
-
-            System.out.println(prueba.toString());
 
 
             return pokemonDTO;
@@ -132,9 +122,16 @@ public class PokedexPokemonSpecService implements PokedexPokemonSpecs {
     @Override
     public SingleEsPokemonDTO getEsPokemon(String name, String language) {
         try {
-            URL connection = new URL(POKEMON_SPECIES_URL + name);
-            HttpURLConnection con = (HttpURLConnection) connection.openConnection();
+            HttpURLConnection con = null;
+            URL connection = null;
+            try{
+            connection = new URL(POKEMON_SPECIES_URL + name);
+            con = (HttpURLConnection) connection.openConnection();
             con.setRequestMethod("GET");
+
+            }catch (FileNotFoundException e){
+                throw new FileNotFoundException("The pokemon does not exist");
+            }
             String response = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
 
             // Parse the response into a JSON object.
@@ -217,17 +214,6 @@ public class PokedexPokemonSpecService implements PokedexPokemonSpecs {
                 }
                 pokemonDTO.getAbilities().add(abilitiesDTO);
             }
-            JSONObject prueba = new JSONObject();
-            prueba.put("abilities",pokemonDTO.getAbilities());
-            prueba.put("stats",pokemonDTO.getStats());
-            prueba.put("type",pokemonDTO.getType());
-            prueba.put("description",pokemonDTO.getDescription());
-            prueba.put("img_path",pokemonDTO.getImg_path());
-            prueba.put("language",pokemonDTO.getLanguage());
-            prueba.put("index",pokemonDTO.getIndex());
-            prueba.put("name",pokemonDTO.getName());
-
-            System.out.println(prueba.toString());
 
 
             return pokemonDTO;

@@ -26,6 +26,9 @@ public class Fight {
     private Integer id;
 
     @Column(nullable = false)
+    private String winnerName;
+
+    @Column(nullable = false)
     private Integer userId;
 
     @Column(nullable = false)

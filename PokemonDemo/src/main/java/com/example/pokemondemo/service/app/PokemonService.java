@@ -1,16 +1,19 @@
 package com.example.pokemondemo.service.app;
 
 
+import java.net.HttpURLConnection;
 import java.util.List;
 
 import com.example.pokemondemo.domain.*;
 import com.example.pokemondemo.model.DataBase.PokemonDTO;
+import com.example.pokemondemo.model.PokeApi.AbilitiesDTO;
+import com.example.pokemondemo.model.PokeApi.SingleEsPokemonDTO;
 import com.example.pokemondemo.model.profilePayload.response.ClassicResponse;
 import com.example.pokemondemo.model.profilePayload.response.TrainerPokedex;
-import com.example.pokemondemo.repository.FollowRepository;
+import com.example.pokemondemo.pokeConnection.Impl.PokedexPokemonSpecService;
+import com.example.pokemondemo.repository.*;
+import com.example.pokemondemo.service.security.JWTService;
 import com.example.pokemondemo.util.*;
-import com.example.pokemondemo.repository.PokemonRepository;
-import com.example.pokemondemo.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,26 +26,32 @@ public class PokemonService {
     private final PokemonRepository pokemonRepository;
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final PokedexPokemonSpecService pokedexPokemonSpecService;
+    private final MechanismRepository mechanismRepository;
+    private final TypeRepository typeRepository;
 
     public PokemonService(final PokemonRepository pokemonRepository,
-                          final UserRepository userRepository, FollowRepository followRepository) {
+                          final UserRepository userRepository, FollowRepository followRepository, JWTService jwtService, PokedexPokemonSpecService pokedexPokemonSpecService, MechanismRepository mechanismRepository, TypeRepository typeRepository) {
         this.pokemonRepository = pokemonRepository;
         this.userRepository = userRepository;
         this.followRepository = followRepository;
+        this.pokedexPokemonSpecService = pokedexPokemonSpecService;
+        this.mechanismRepository = mechanismRepository;
+        this.typeRepository = typeRepository;
     }
 
-    public ClassicResponse curePokemon(String userEmail, Integer pokemonId, String username){
+    public ClassicResponse curePokemon(String userEmail, Integer pokemonId, String username) {
         User user = userRepository.findByEmailIgnoreCase(userEmail).get();
-        if(user.getRole().equals(Role.DOCTOR)){
+        if (user.getRole().equals(Role.DOCTOR)) {
             User trainer = userRepository.findByUsernameIgnoreCase(username);
-            if(trainer == null){
+            if (trainer == null) {
                 throw new NotFoundException("The trainer does not exist");
             }
             Pokemon pokemon = pokemonRepository.findById(pokemonId).get();
-            if(pokemon.getUser().equals(trainer)){
+            if (pokemon.getUser().equals(trainer)) {
                 return ClassicResponse.builder()
                         .ResponseCode("200")
-                        .ResponseMessage("You have cured the "+pokemon.getName()+" of "+trainer.getUsername())
+                        .ResponseMessage("You have cured the " + pokemon.getName() + " of " + trainer.getUsername())
                         .build();
             }
             throw new NotFoundException("The pokemon does not belong to the trainer");
@@ -89,4 +98,63 @@ public class PokemonService {
         return pokemonDTO;
     }
 
+    public ClassicResponse addNewPokemon(String userEmail, PokemonDTO pokemonDTO, String username) {
+        User user = userRepository.findByEmailIgnoreCase(userEmail).get();
+        if(!user.getUsername().equals(username)){
+            throw new NotFoundException("You can't add a pokemon to other trainer");
+        }
+        SingleEsPokemonDTO pokemon = null;
+        try {
+            pokemon = pokedexPokemonSpecService.getEsPokemon(pokemonDTO.getSpecie(), "en");
+        } catch (Exception e) {
+            throw new NotFoundException("The pokemon does not exist");
+
+        }
+        Pokemon pokemonSave = Pokemon.builder()
+                .name(pokemonDTO.getName())
+                .specie(pokemon.getName())
+                .user(user)
+                .image(pokemon.getImg_path())
+                .build();
+        pokemonSave = pokemonRepository.save(pokemonSave);
+
+        for (AbilitiesDTO a: pokemon.getAbilities()){
+            if(!mechanismRepository.findByNameIgnoreCase(a.getName())){
+                Mechanism mechanism = Mechanism.builder()
+                        .name(a.getName())
+                        .pokemonid(pokemonSave)
+                        .build();
+                mechanismRepository.save(mechanism);
+            }else if(!mechanismRepository.findByNameIgnoreCaseAAndPokemonid(a.getName(), pokemonSave)){
+                Mechanism mechanism = Mechanism.builder()
+                        .name(a.getName())
+                        .pokemonid(pokemonSave)
+                        .build();
+                mechanismRepository.save(mechanism);
+            }
+        }
+        for(String t: pokemon.getType()){
+            if(!typeRepository.findByNameIgnoreCase(t)){
+                Type type = Type.builder()
+                        .name(t)
+                        .pokemonid(pokemonSave)
+                        .build();
+                typeRepository.save(type);
+            }else if(!typeRepository.findByNameIgnoreCaseAndPokemonid(t, pokemonSave)){
+                Type type = Type.builder()
+                        .name(t)
+                        .pokemonid(pokemonSave)
+                        .build();
+                typeRepository.save(type);
+            }
+        }
+        return ClassicResponse.builder()
+                .ResponseCode("OK")
+                .ResponseMessage("The pokemon " + pokemonDTO.getName()+ " added to "+ user.getUsername()+" with id "+pokemonSave.getId())
+                .build();
+    }
+
+    public ClassicResponse updatePokemon(String userEmail, PokemonDTO pokemonDTO, String username) {
+        return null;
+    }
 }

@@ -2,20 +2,13 @@ package com.example.pokemondemo.rest;
 
 import com.example.pokemondemo.model.DataBase.PokemonDTO;
 import com.example.pokemondemo.service.app.PokemonService;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.validation.Valid;
-import java.util.List;
+import com.example.pokemondemo.service.security.JWTService;
+import com.example.pokemondemo.util.NotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -23,10 +16,36 @@ import org.springframework.web.bind.annotation.RestController;
 public class PokemonResource {
 
     private final PokemonService pokemonService;
+    private final JWTService jwtService;
 
-    public PokemonResource(final PokemonService pokemonService) {
+    public PokemonResource(final PokemonService pokemonService, JWTService jwtService) {
         this.pokemonService = pokemonService;
+        this.jwtService = jwtService;
     }
 
+    @PostMapping("/pokemon-trainer/{username}/add-pokemon")
+    public ResponseEntity<?> addNewPokemon(HttpServletRequest request, @RequestBody PokemonDTO pokemonDTO, @PathVariable String username){
+        String header = request.getHeader("Authorization");
+        String jwt = header.substring(7);
+        String userEmail = jwtService.getUserEmail(jwt);
+        try{
+            return ResponseEntity.ok(pokemonService.addNewPokemon(userEmail, pokemonDTO, username));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/pokemon/{username}/update-pokemon")
+    public ResponseEntity<?> updatePokemon(HttpServletRequest request, @RequestBody PokemonDTO pokemonDTO, @PathVariable String username){
+        String header = request.getHeader("Authorization");
+        String jwt = header.substring(7);
+        String userEmail = jwtService.getUserEmail(jwt);
+        try{
+            return ResponseEntity.ok(pokemonService.updatePokemon(userEmail, pokemonDTO, username));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
 
 }
