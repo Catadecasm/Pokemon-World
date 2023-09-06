@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MechanismRepository extends JpaRepository<Mechanism, Integer> {
     boolean findByNameIgnoreCase(String name);
-    boolean findByNameIgnoreCaseAAndPokemonid(String name, Pokemon pokemon);
+    boolean findByNameIgnoreCaseAndPokemonid(String name, Pokemon pokemon);
 }

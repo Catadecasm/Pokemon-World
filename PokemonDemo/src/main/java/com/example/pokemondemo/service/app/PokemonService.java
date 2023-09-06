@@ -100,7 +100,7 @@ public class PokemonService {
 
     public ClassicResponse addNewPokemon(String userEmail, PokemonDTO pokemonDTO, String username) {
         User user = userRepository.findByEmailIgnoreCase(userEmail).get();
-        if(!user.getUsername().equals(username)){
+        if (!user.getUsername().equals(username)) {
             throw new NotFoundException("You can't add a pokemon to other trainer");
         }
         SingleEsPokemonDTO pokemon = null;
@@ -118,14 +118,14 @@ public class PokemonService {
                 .build();
         pokemonSave = pokemonRepository.save(pokemonSave);
 
-        for (AbilitiesDTO a: pokemon.getAbilities()){
-            if(!mechanismRepository.findByNameIgnoreCase(a.getName())){
+        for (AbilitiesDTO a : pokemon.getAbilities()) {
+            if (!mechanismRepository.findByNameIgnoreCase(a.getName())) {
                 Mechanism mechanism = Mechanism.builder()
                         .name(a.getName())
                         .pokemonid(pokemonSave)
                         .build();
                 mechanismRepository.save(mechanism);
-            }else if(!mechanismRepository.findByNameIgnoreCaseAAndPokemonid(a.getName(), pokemonSave)){
+            } else if (!mechanismRepository.findByNameIgnoreCaseAndPokemonid(a.getName(), pokemonSave)) {
                 Mechanism mechanism = Mechanism.builder()
                         .name(a.getName())
                         .pokemonid(pokemonSave)
@@ -133,14 +133,14 @@ public class PokemonService {
                 mechanismRepository.save(mechanism);
             }
         }
-        for(String t: pokemon.getType()){
-            if(!typeRepository.findByNameIgnoreCase(t)){
+        for (String t : pokemon.getType()) {
+            if (!typeRepository.findByNameIgnoreCase(t)) {
                 Type type = Type.builder()
                         .name(t)
                         .pokemonid(pokemonSave)
                         .build();
                 typeRepository.save(type);
-            }else if(!typeRepository.findByNameIgnoreCaseAndPokemonid(t, pokemonSave)){
+            } else if (!typeRepository.findByNameIgnoreCaseAndPokemonid(t, pokemonSave)) {
                 Type type = Type.builder()
                         .name(t)
                         .pokemonid(pokemonSave)
@@ -150,11 +150,19 @@ public class PokemonService {
         }
         return ClassicResponse.builder()
                 .ResponseCode("OK")
-                .ResponseMessage("The pokemon " + pokemonDTO.getName()+ " added to "+ user.getUsername()+" with id "+pokemonSave.getId())
+                .ResponseMessage("The pokemon " + pokemonDTO.getName() + " added to " + user.getUsername() + " with id " + pokemonSave.getId())
                 .build();
     }
 
     public ClassicResponse updatePokemon(String userEmail, PokemonDTO pokemonDTO, String username) {
-        return null;
+        User user = userRepository.findByEmailIgnoreCase(userEmail).get();
+        if (!user.getUsername().equals(username)) {
+            throw new NotFoundException("You can't add a pokemon to other trainer");
+        }
+
+        return ClassicResponse.builder()
+                .ResponseCode("OK")
+                .ResponseMessage("The pokemon " + pokemonDTO.getName() + " updated to " + user.getUsername())
+                .build();
     }
 }

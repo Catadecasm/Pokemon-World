@@ -30,7 +30,7 @@ public class UserResource {
         this.userService = userService;
     }
 
-    @PostMapping("/singup")
+    @PostMapping("/sing-up")
     public ResponseEntity<?> signUpUser(@RequestBody SingUpRequest singUpRequest) {
         return ResponseEntity.ok(userService.signUpUser(singUpRequest));
     }
