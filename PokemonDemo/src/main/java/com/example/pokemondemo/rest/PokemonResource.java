@@ -26,33 +26,63 @@ public class PokemonResource {
         this.jwtService = jwtService;
     }
 
-    @PostMapping("/pokemon-trainer/{username}/add-pokemon")
-    public ResponseEntity<?> addNewPokemon(HttpServletRequest request, @RequestBody @Valid PokemonDTO pokemonDTO, @PathVariable String username){
+    @GetMapping("/pokemon-trainer/{username}/get-pokemon")
+    public ResponseEntity<?> getPokemons(HttpServletRequest request, @RequestParam(name = "quantity", required = true) Integer quantity, @RequestParam(name = "offset", required = true) Integer offset, @PathVariable String username) {
         String header = request.getHeader("Authorization");
         String jwt = header.substring(7);
         String userEmail = jwtService.getUserEmail(jwt);
-        try{
+        try {
+            return ResponseEntity.ok(pokemonService.getPokemons(userEmail, quantity, offset, username));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/pokemon-trainer/{username}/add-pokemon")
+    public ResponseEntity<?> addNewPokemon(HttpServletRequest request, @RequestBody PokemonDTO pokemonDTO, @PathVariable String username) {
+        String header = request.getHeader("Authorization");
+        String jwt = header.substring(7);
+        String userEmail = jwtService.getUserEmail(jwt);
+        if (!isPokemonDTOValid(pokemonDTO)) {
+            return ResponseEntity.badRequest().body("The json recived is not valid");
+        }
+        try {
             return ResponseEntity.ok(pokemonService.addNewPokemon(userEmail, pokemonDTO, username));
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PutMapping("/pokemon/{username}/update-pokemon")
-    public ResponseEntity<?> updatePokemon(HttpServletRequest request, @RequestBody PokemonDTO pokemonDTO, @PathVariable String username){
+    public ResponseEntity<?> updatePokemon(HttpServletRequest request, @RequestBody PokemonDTO pokemonDTO, @PathVariable String username) {
         String header = request.getHeader("Authorization");
         String jwt = header.substring(7);
         String userEmail = jwtService.getUserEmail(jwt);
-        if(!isPokemonDTOValid(pokemonDTO)){
+        if (!isPokemonDTOValid(pokemonDTO)) {
             return ResponseEntity.badRequest().body("The json recived is not valid");
         }
-        try{
+        try {
             return ResponseEntity.ok(pokemonService.updatePokemon(userEmail, pokemonDTO, username));
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
     }
+
+    @DeleteMapping("/pokemon/{username}/delete-pokemon/{pokemonId}")
+    public ResponseEntity<?> deletePokemon(HttpServletRequest request, @PathVariable Integer pokemonId, @PathVariable String username) {
+        String header = request.getHeader("Authorization");
+        String jwt = header.substring(7);
+        String userEmail = jwtService.getUserEmail(jwt);
+        try {
+            return ResponseEntity.ok(pokemonService.deletePokemon(userEmail, pokemonId, username));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+
+    }
+
     public static boolean isPokemonDTOValid(PokemonDTO pokemonDTO) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();

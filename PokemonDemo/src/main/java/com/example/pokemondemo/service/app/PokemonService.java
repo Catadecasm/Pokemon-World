@@ -157,12 +157,41 @@ public class PokemonService {
     public ClassicResponse updatePokemon(String userEmail, PokemonDTO pokemonDTO, String username) {
         User user = userRepository.findByEmailIgnoreCase(userEmail).get();
         if (!user.getUsername().equals(username)) {
-            throw new NotFoundException("You can't add a pokemon to other trainer");
+            throw new NotFoundException("You can't update a pokemon to other trainer");
         }
-
+        if(pokemonRepository.findById(pokemonDTO.getId()).isEmpty()){
+            throw new NotFoundException("The pokemon does not exist, the id does not match with any pokemon");
+        }
+        Pokemon pokemon = pokemonRepository.findById(pokemonDTO.getId()).get();
+                pokemon.setName(pokemonDTO.getName());
+        pokemonRepository.save(pokemon);
         return ClassicResponse.builder()
                 .ResponseCode("OK")
                 .ResponseMessage("The pokemon " + pokemonDTO.getName() + " updated to " + user.getUsername())
                 .build();
+    }
+
+    public ClassicResponse deletePokemon(String userEmail, Integer pokemonId, String username) {
+        User user = userRepository.findByEmailIgnoreCase(userEmail).get();
+        if (!user.getUsername().equals(username)) {
+            throw new NotFoundException("You can't delete a pokemon to other trainer");
+        }
+        if(pokemonRepository.findById(pokemonId).isEmpty()){
+            throw new NotFoundException("The pokemon does not exist, the id does not match with any pokemon");
+        }
+        Pokemon pokemon = pokemonRepository.findById(pokemonId).get();
+        pokemonRepository.delete(pokemon);
+        return ClassicResponse.builder()
+                .ResponseCode("OK")
+                .ResponseMessage("The pokemon " + pokemon.getName() + " deleted to " + user.getUsername())
+                .build();
+    }
+
+    public TrainerPokedex getPokemons(String userEmail, Integer quantity, Integer offset, String username) {
+        User user = userRepository.findByEmailIgnoreCase(userEmail).get();
+        if (!user.getUsername().equals(username)) {
+            throw new NotFoundException("You can't get a pokemon to other trainer, If you want to, use the follow endpoint!");
+        }
+        return findAllByUser(username, quantity, offset);
     }
 }
