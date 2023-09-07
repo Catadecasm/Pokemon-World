@@ -8,14 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -44,29 +37,16 @@ public class FightResource {
         }
     }
 
-    @GetMapping()
-    public ResponseEntity<?> getAllFights() {
-        return ResponseEntity.ok(fightService.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<FightDTO> getFight(@PathVariable(name = "id") final Integer id) {
-        return ResponseEntity.ok(fightService.get(id));
-    }
-
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Integer> updateFight(@PathVariable(name = "id") final Integer id,
-            @RequestBody @Valid final FightDTO fightDTO) {
-        fightService.update(id, fightDTO);
-        return ResponseEntity.ok(id);
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteFight(@PathVariable(name = "id") final Integer id) {
-        fightService.delete(id);
-        return ResponseEntity.noContent().build();
+    @GetMapping("/get-fight/{username}")
+    public ResponseEntity<?> getFight(@PathVariable final String username, @RequestParam(name = "quantity") Integer quantity, @RequestParam(name = "offset") Integer offset, HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        String jwt = header.substring(7);
+        String userEmail = jwtService.getUserEmail(jwt);
+        try {
+            return ResponseEntity.ok(fightService.getFight(username, quantity, offset, userEmail));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }

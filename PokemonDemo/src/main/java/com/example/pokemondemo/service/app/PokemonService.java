@@ -16,7 +16,6 @@ import com.example.pokemondemo.service.security.JWTService;
 import com.example.pokemondemo.util.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -81,7 +80,7 @@ public class PokemonService {
 
     private TrainerPokedex findAllByUser(String userEmail, Integer quantity, Integer offset) {
         User user = userRepository.findByEmailIgnoreCase(userEmail).get();
-        Pageable pageable = PageRequest.of(offset, quantity, Sort.by("id"));
+        Pageable pageable = PageRequest.of(offset, quantity);
         List<Pokemon> pokemons = pokemonRepository.findAllByUser(user, pageable);
         return TrainerPokedex.builder()
                 .quantity(quantity)

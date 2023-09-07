@@ -2,11 +2,12 @@ package com.example.pokemondemo.service.app;
 
 
 import com.example.pokemondemo.domain.League;
-import com.example.pokemondemo.model.DataBase.LeagueDTO;
+import com.example.pokemondemo.domain.User;
+import com.example.pokemondemo.model.payload.response.LeagueResponseDTO;
+import com.example.pokemondemo.model.payload.response.RegisterLeagueDTO;
 import com.example.pokemondemo.repository.LeagueRepository;
-import com.example.pokemondemo.util.*;
-import java.util.List;
-import org.springframework.data.domain.Sort;
+import com.example.pokemondemo.repository.UserRepository;
+import com.example.pokemondemo.util.NotFoundException;
 import org.springframework.stereotype.Service;
 
 
@@ -14,54 +15,30 @@ import org.springframework.stereotype.Service;
 public class LeagueService {
 
     private final LeagueRepository leagueRepository;
+    private final UserRepository userRepository;
 
-    public LeagueService(final LeagueRepository leagueRepository) {
+    public LeagueService(final LeagueRepository leagueRepository, UserRepository userRepository) {
         this.leagueRepository = leagueRepository;
+        this.userRepository = userRepository;
     }
 
-    public List<LeagueDTO> findAll() {
-        final List<League> leagues = leagueRepository.findAll(Sort.by("id"));
-        return leagues.stream()
-                .map(league -> mapToDTO(league, new LeagueDTO()))
-                .toList();
-    }
 
-    public LeagueDTO get(final Integer id) {
-        return leagueRepository.findById(id)
-                .map(league -> mapToDTO(league, new LeagueDTO()))
-                .orElseThrow(NotFoundException::new);
+    public RegisterLeagueDTO registerLeague(String userEmail, Integer id) {
+        User user = userRepository.findByEmailIgnoreCase(userEmail).get();
+        if (leagueRepository.findById(id).isEmpty()) {
+            throw new NotFoundException("League not found");
+        }
+        League league = leagueRepository.findById(id).get();
+        user.setLeagueid(league);
+        userRepository.save(user);
+        return RegisterLeagueDTO.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .league(LeagueResponseDTO.builder()
+                        .id(user.getLeagueid().getId())
+                        .name(user.getLeagueid().getName())
+                        .build())
+                .build();
     }
-
-    public Integer create(final LeagueDTO leagueDTO) {
-        final League league = new League();
-        mapToEntity(leagueDTO, league);
-        return leagueRepository.save(league).getId();
-    }
-
-    public void update(final Integer id, final LeagueDTO leagueDTO) {
-        final League league = leagueRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
-        mapToEntity(leagueDTO, league);
-        leagueRepository.save(league);
-    }
-
-    public void delete(final Integer id) {
-        leagueRepository.deleteById(id);
-    }
-
-    private LeagueDTO mapToDTO(final League league, final LeagueDTO leagueDTO) {
-        leagueDTO.setId(league.getId());
-        leagueDTO.setName(league.getName());
-        return leagueDTO;
-    }
-
-    private League mapToEntity(final LeagueDTO leagueDTO, final League league) {
-        league.setName(leagueDTO.getName());
-        return league;
-    }
-
-    public boolean nameExists(final String name) {
-        return leagueRepository.existsByNameIgnoreCase(name);
-    }
-
 }
