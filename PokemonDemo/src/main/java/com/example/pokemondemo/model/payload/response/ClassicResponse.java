@@ -1,4 +1,4 @@
-package com.example.pokemondemo.model.profilePayload.response;
+package com.example.pokemondemo.model.payload.response;
 
 
 import lombok.*;

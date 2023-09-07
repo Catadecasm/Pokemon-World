@@ -1,4 +1,4 @@
-package com.example.pokemondemo.model.profilePayload.request;
+package com.example.pokemondemo.model.payload.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

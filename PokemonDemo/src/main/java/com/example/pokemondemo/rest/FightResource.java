@@ -1,11 +1,11 @@
 package com.example.pokemondemo.rest;
 
-import com.example.pokemondemo.model.DataBase.FightDTO;
+import com.example.pokemondemo.model.payload.request.FightDTO;
 import com.example.pokemondemo.service.app.FightService;
+import com.example.pokemondemo.service.security.JWTService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import java.util.List;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,13 +23,29 @@ import org.springframework.web.bind.annotation.RestController;
 public class FightResource {
 
     private final FightService fightService;
+    private final JWTService jwtService;
 
-    public FightResource(final FightService fightService) {
+    public FightResource(final FightService fightService, JWTService jwtService) {
         this.fightService = fightService;
+        this.jwtService = jwtService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<FightDTO>> getAllFights() {
+    @PostMapping("/create-fight")
+    public ResponseEntity<?> createFight(HttpServletRequest request, @RequestBody FightDTO fightDTO) {
+
+        String header = request.getHeader("Authorization");
+        String jwt = header.substring(7);
+        String userEmail = jwtService.getUserEmail(jwt);
+
+        try {
+            return ResponseEntity.ok(fightService.createFight(userEmail,fightDTO));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping()
+    public ResponseEntity<?> getAllFights() {
         return ResponseEntity.ok(fightService.findAll());
     }
 
@@ -38,12 +54,6 @@ public class FightResource {
         return ResponseEntity.ok(fightService.get(id));
     }
 
-    @PostMapping
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<Integer> createFight(@RequestBody @Valid final FightDTO fightDTO) {
-        final Integer createdId = fightService.create(fightDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
-    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Integer> updateFight(@PathVariable(name = "id") final Integer id,

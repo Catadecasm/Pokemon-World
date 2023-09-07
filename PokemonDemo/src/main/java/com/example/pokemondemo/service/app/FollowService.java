@@ -4,7 +4,7 @@ package com.example.pokemondemo.service.app;
 import java.util.Optional;
 
 import com.example.pokemondemo.domain.User;
-import com.example.pokemondemo.model.profilePayload.response.ClassicResponse;
+import com.example.pokemondemo.model.payload.response.ClassicResponse;
 import com.example.pokemondemo.util.*;
 import com.example.pokemondemo.domain.Follow;
 import com.example.pokemondemo.repository.FollowRepository;

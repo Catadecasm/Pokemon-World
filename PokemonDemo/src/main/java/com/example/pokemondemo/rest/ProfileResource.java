@@ -1,7 +1,7 @@
 package com.example.pokemondemo.rest;
 
-import com.example.pokemondemo.model.profilePayload.request.ActionDTO;
-import com.example.pokemondemo.model.profilePayload.request.ChangeRoleDTO;
+import com.example.pokemondemo.model.payload.request.ActionDTO;
+import com.example.pokemondemo.model.payload.request.ChangeRoleDTO;
 import com.example.pokemondemo.service.app.FollowService;
 import com.example.pokemondemo.service.app.PokemonService;
 import com.example.pokemondemo.service.app.UserService;

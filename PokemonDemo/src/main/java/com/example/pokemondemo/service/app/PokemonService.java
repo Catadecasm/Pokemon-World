@@ -1,15 +1,15 @@
 package com.example.pokemondemo.service.app;
 
 
-import java.net.HttpURLConnection;
 import java.util.List;
 
 import com.example.pokemondemo.domain.*;
 import com.example.pokemondemo.model.DataBase.PokemonDTO;
 import com.example.pokemondemo.model.PokeApi.AbilitiesDTO;
 import com.example.pokemondemo.model.PokeApi.SingleEsPokemonDTO;
-import com.example.pokemondemo.model.profilePayload.response.ClassicResponse;
-import com.example.pokemondemo.model.profilePayload.response.TrainerPokedex;
+import com.example.pokemondemo.model.payload.request.MechanismsChangeDTO;
+import com.example.pokemondemo.model.payload.response.ClassicResponse;
+import com.example.pokemondemo.model.payload.response.TrainerPokedex;
 import com.example.pokemondemo.pokeConnection.Impl.PokedexPokemonSpecService;
 import com.example.pokemondemo.repository.*;
 import com.example.pokemondemo.service.security.JWTService;
@@ -159,11 +159,11 @@ public class PokemonService {
         if (!user.getUsername().equals(username)) {
             throw new NotFoundException("You can't update a pokemon to other trainer");
         }
-        if(pokemonRepository.findById(pokemonDTO.getId()).isEmpty()){
+        if (pokemonRepository.findById(pokemonDTO.getId()).isEmpty()) {
             throw new NotFoundException("The pokemon does not exist, the id does not match with any pokemon");
         }
         Pokemon pokemon = pokemonRepository.findById(pokemonDTO.getId()).get();
-                pokemon.setName(pokemonDTO.getName());
+        pokemon.setName(pokemonDTO.getName());
         pokemonRepository.save(pokemon);
         return ClassicResponse.builder()
                 .ResponseCode("OK")
@@ -176,7 +176,7 @@ public class PokemonService {
         if (!user.getUsername().equals(username)) {
             throw new NotFoundException("You can't delete a pokemon to other trainer");
         }
-        if(pokemonRepository.findById(pokemonId).isEmpty()){
+        if (pokemonRepository.findById(pokemonId).isEmpty()) {
             throw new NotFoundException("The pokemon does not exist, the id does not match with any pokemon");
         }
         Pokemon pokemon = pokemonRepository.findById(pokemonId).get();
@@ -193,5 +193,27 @@ public class PokemonService {
             throw new NotFoundException("You can't get a pokemon to other trainer, If you want to, use the follow endpoint!");
         }
         return findAllByUser(username, quantity, offset);
+    }
+
+    public Boolean updateMecha(String userEmail, MechanismsChangeDTO mechanismsChangeDTO) {
+        User user = userRepository.findByEmailIgnoreCase(userEmail).get();
+        List<Pokemon> pokemons = pokemonRepository.findAllByUser(user);
+        for (Pokemon p : pokemons) {
+            if (p.getName().equals(mechanismsChangeDTO.getName())) {
+                for (String m : mechanismsChangeDTO.getMechanism()) {
+                    if (!mechanismRepository.findByNameIgnoreCaseAndPokemonid(m, p)) {
+                        Mechanism mechanism = Mechanism.builder()
+                                .name(m)
+                                .pokemonid(p)
+                                .build();
+                        mechanismRepository.save(mechanism);
+                        return true;
+                    }
+
+                }
+                throw new NotFoundException("The pokemon already has the mechanism");
+            }
+        }
+        throw new NotFoundException("The pokemon does not exist");
     }
 }

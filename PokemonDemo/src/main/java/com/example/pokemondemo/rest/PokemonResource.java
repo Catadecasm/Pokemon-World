@@ -1,6 +1,7 @@
 package com.example.pokemondemo.rest;
 
 import com.example.pokemondemo.model.DataBase.PokemonDTO;
+import com.example.pokemondemo.model.payload.request.MechanismsChangeDTO;
 import com.example.pokemondemo.service.app.PokemonService;
 import com.example.pokemondemo.service.security.JWTService;
 import com.example.pokemondemo.util.NotFoundException;
@@ -82,6 +83,20 @@ public class PokemonResource {
 
 
     }
+
+    @PutMapping("/pokemon/update-mecahisms")
+    public ResponseEntity<?> updateMecha(HttpServletRequest request, @RequestBody MechanismsChangeDTO mechanismsChangeDTO) {
+        String header = request.getHeader("Authorization");
+        String jwt = header.substring(7);
+        String userEmail = jwtService.getUserEmail(jwt);
+
+        try {
+            return ResponseEntity.ok(pokemonService.updateMecha(userEmail, mechanismsChangeDTO));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 
     public static boolean isPokemonDTOValid(PokemonDTO pokemonDTO) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();

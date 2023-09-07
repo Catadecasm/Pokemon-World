@@ -3,10 +3,12 @@ package com.example.pokemondemo.service.app;
 
 import com.example.pokemondemo.domain.Fight;
 import com.example.pokemondemo.domain.User;
+import com.example.pokemondemo.model.payload.request.OpponentDTO;
+import com.example.pokemondemo.model.payload.response.FightResponseDTO;
 import com.example.pokemondemo.repository.FightRepository;
 import com.example.pokemondemo.repository.UserRepository;
 import com.example.pokemondemo.util.*;
-import com.example.pokemondemo.model.DataBase.FightDTO;
+import com.example.pokemondemo.model.payload.request.FightDTO;
 import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
@@ -28,64 +30,33 @@ public class FightService {
         this.userRepository = userRepository;
     }
 
-    public List<FightDTO> findAll() {
-        final List<Fight> fights = fightRepository.findAll(Sort.by("id"));
-        return fights.stream()
-                .map(fight -> mapToDTO(fight, new FightDTO()))
-                .toList();
-    }
 
-    public FightDTO get(final Integer id) {
-        return fightRepository.findById(id)
-                .map(fight -> mapToDTO(fight, new FightDTO()))
-                .orElseThrow(NotFoundException::new);
-    }
-
-    public Integer create(final FightDTO fightDTO) {
-        final Fight fight = new Fight();
-        mapToEntity(fightDTO, fight);
-        return fightRepository.save(fight).getId();
-    }
-
-    public void update(final Integer id, final FightDTO fightDTO) {
-        final Fight fight = fightRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
-        mapToEntity(fightDTO, fight);
-        fightRepository.save(fight);
-    }
 
     public void delete(final Integer id) {
         fightRepository.deleteById(id);
     }
 
-    private FightDTO mapToDTO(final Fight fight, final FightDTO fightDTO) {
-        fightDTO.setId(fight.getId());
-        fightDTO.setUserId(fight.getUserId());
-        fightDTO.setOponentId(fight.getOponentId());
-        fightDTO.setRounds(fight.getRounds());
-        fightDTO.setCreation(fight.getCreation());
-        fightDTO.setUpdatee(fight.getUpdatee());
-        fightDTO.setLeague(fight.getLeague());
-        fightDTO.setUserFightUsers(fight.getUserFightUsers().stream()
-                .map(user -> user.getId())
-                .toList());
-        return fightDTO;
-    }
 
-    private Fight mapToEntity(final FightDTO fightDTO, final Fight fight) {
-        fight.setUserId(fightDTO.getUserId());
-        fight.setOponentId(fightDTO.getOponentId());
-        fight.setRounds(fightDTO.getRounds());
-        fight.setCreation(fightDTO.getCreation());
-        fight.setUpdatee(fightDTO.getUpdatee());
-        fight.setLeague(fightDTO.getLeague());
-        final List<User> userFightUsers = userRepository.findAllById(
-                fightDTO.getUserFightUsers() == null ? Collections.emptyList() : fightDTO.getUserFightUsers());
-        if (userFightUsers.size() != (fightDTO.getUserFightUsers() == null ? 0 : fightDTO.getUserFightUsers().size())) {
-            throw new NotFoundException("one of userFightUsers not found");
+    public FightResponseDTO createFight(String userEmail, FightDTO fightDTO) {
+        User user = userRepository.findByEmailIgnoreCase(userEmail).get();
+        if(!userRepository.existsByUsernameIgnoreCase(fightDTO.getOpponent_1().getUsername()) || !userRepository.existsByUsernameIgnoreCase(fightDTO.getOpponent_2().getUsername())){
+            throw new NotFoundException("One or both of the given trainers does not exist");
         }
-        fight.setUserFightUsers(userFightUsers.stream().collect(Collectors.toSet()));
-        return fight;
-    }
+        if(!user.getUsername().equals(fightDTO.getOpponent_1().getUsername()) && !user.getUsername().equals(fightDTO.getOpponent_2().getUsername())){
+            throw new NotFoundException("The given fight is not a fight made by you");
+        }
+        if(user.getUsername().equals(fightDTO.getOpponent_1().getUsername()) && user.getUsername().equals(fightDTO.getOpponent_2().getUsername())){
+            throw new NotFoundException("You can't fight yourself");
+        }
 
+        if(user.getUsername().equals(fightDTO.getOpponent_1().getUsername())){
+            User you = userRepository.findByUsernameIgnoreCase(fightDTO.getOpponent_1().getUsername());
+            User opponent = userRepository.findByUsernameIgnoreCase(fightDTO.getOpponent_2().getUsername());
+            if(!you.getLeagueid().equals(opponent.getLeagueid())){
+                throw new NotFoundException("You can't fight a trainer from a different league");
+            }
+        }else{
+
+        }
+    }
 }
