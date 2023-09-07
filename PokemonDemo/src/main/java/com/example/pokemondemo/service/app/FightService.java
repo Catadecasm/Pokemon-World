@@ -3,9 +3,11 @@ package com.example.pokemondemo.service.app;
 
 import com.example.pokemondemo.domain.Fight;
 import com.example.pokemondemo.domain.User;
+import com.example.pokemondemo.model.payload.request.OpponentDTO;
 import com.example.pokemondemo.model.payload.response.FightListDTO;
 import com.example.pokemondemo.model.payload.response.FightResponseDTO;
 import com.example.pokemondemo.model.payload.response.FightResultDTO;
+import com.example.pokemondemo.model.payload.response.ResultDTO;
 import com.example.pokemondemo.repository.FightRepository;
 import com.example.pokemondemo.repository.FollowRepository;
 import com.example.pokemondemo.repository.LeagueRepository;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -135,14 +138,49 @@ public class FightService {
                 FightListDTO fightListDTO =  new FightListDTO();
                 fightListDTO.setIndex(offset);
                 fightListDTO.setQuantity(quantity);
+                fightListDTO.setResult(new ArrayList<>());
                 for(Fight fight : fights){
                     FightResultDTO resultDTO = new FightResultDTO();
                     resultDTO.setId(fight.getId());
                     resultDTO.setCreateAt(fight.getCreation().toString());
                     resultDTO.setUpdateAt(fight.getUpdatee().toString());
+                    resultDTO.setLeague(fight.getLeague());
+                    resultDTO.setResult(ResultDTO.builder()
+                                    .winner(fight.getWinnerName())
+                                    .rounds(fight.getRounds()).build());
+                    resultDTO.setOpponent(OpponentDTO.builder()
+                            .email(search.getEmail())
+                            .username(search.getRealUsername())
+                            .id(search.getId())
+                            .build());
+                    fightListDTO.getResult().add(resultDTO);
                 }
+                return fightListDTO;
             }
+        }else{
+            Pageable pageable = PageRequest.of(offset, quantity);
+            List<Fight> fights = fightRepository.findAllByUserFightUsers(user, pageable);
+            FightListDTO fightListDTO =  new FightListDTO();
+            fightListDTO.setIndex(offset);
+            fightListDTO.setQuantity(quantity);
+            fightListDTO.setResult(new ArrayList<>());
+            for(Fight fight : fights){
+                FightResultDTO resultDTO = new FightResultDTO();
+                resultDTO.setId(fight.getId());
+                resultDTO.setCreateAt(fight.getCreation().toString());
+                resultDTO.setUpdateAt(fight.getUpdatee().toString());
+                resultDTO.setLeague(fight.getLeague());
+                resultDTO.setResult(ResultDTO.builder()
+                        .winner(fight.getWinnerName())
+                        .rounds(fight.getRounds()).build());
+                resultDTO.setOpponent(OpponentDTO.builder()
+                        .email(user.getEmail())
+                        .username(user.getRealUsername())
+                        .id(user.getId())
+                        .build());
+                fightListDTO.getResult().add(resultDTO);
+            }
+            return fightListDTO;
         }
-        return null;
     }
 }
