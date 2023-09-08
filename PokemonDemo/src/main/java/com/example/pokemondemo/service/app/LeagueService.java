@@ -34,7 +34,7 @@ public class LeagueService {
         return RegisterLeagueDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .username(user.getUsername())
+                .username(user.getRealUsername())
                 .league(LeagueResponseDTO.builder()
                         .id(user.getLeagueid().getId())
                         .name(user.getLeagueid().getName())

@@ -113,7 +113,7 @@ public class UserService {
         return LogInResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .username(user.getUsername())
+                .username(user.getRealUsername())
                 .token(token)
                 .build();
     }
@@ -211,7 +211,7 @@ public class UserService {
         userDTO.setId(user.getId());
         userDTO.setEmail(user.getEmail());
         userDTO.setPassword(user.getPassword());
-        userDTO.setUsername(user.getUsername());
+        userDTO.setUsername(user.getRealUsername());
         userDTO.setRole(user.getRole() == null ? null : String.valueOf(user.getRole()));
         userDTO.setLeagueid(user.getLeagueid() == null ? null : user.getLeagueid().getId());
         return userDTO;

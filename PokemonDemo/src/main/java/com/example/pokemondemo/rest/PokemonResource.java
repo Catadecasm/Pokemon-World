@@ -27,16 +27,22 @@ public class PokemonResource {
         this.jwtService = jwtService;
     }
 
-    @GetMapping("/pokemon-trainer/{username}/get-pokemon")
-    public ResponseEntity<?> getPokemons(HttpServletRequest request, @RequestParam(name = "quantity", required = true) Integer quantity, @RequestParam(name = "offset", required = true) Integer offset, @PathVariable String username) {
+    @GetMapping("/{username}/AllPokemons")
+    public ResponseEntity<?> getFollows(HttpServletRequest request,
+                                        @PathVariable(name = "username") String username,
+                                        @RequestParam(name = "offset", required = true) int offset,
+                                        @RequestParam(name = "quantity", required = true) int quantity) {
         String header = request.getHeader("Authorization");
         String jwt = header.substring(7);
         String userEmail = jwtService.getUserEmail(jwt);
-        try {
-            return ResponseEntity.ok(pokemonService.getPokemons(userEmail, quantity, offset, username));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        if (userEmail != null) {
+            try {
+                return ResponseEntity.ok().body(pokemonService.findAllByFollow(userEmail, username, quantity, offset));
+            } catch (NotFoundException e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
         }
+        return ResponseEntity.badRequest().body("User not found");
     }
 
     @PostMapping("/pokemon-trainer/{username}/add-pokemon")

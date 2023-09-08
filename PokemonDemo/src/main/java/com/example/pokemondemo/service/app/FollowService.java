@@ -31,7 +31,7 @@ public class FollowService {
         if (userFollowed == null) {
             throw new NotFoundException("The trainer does not exist");
         }
-        if(userFollowed.getUsername().equals(userFollower.get().getUsername())){
+        if(userFollowed.getRealUsername().equals(userFollower.get().getRealUsername())){
             throw new NotFoundException("You can't follow yourself");
         }
         if(followRepository.findFollowByFollowedAndFollower(userFollowed, userFollower.get()) != null){

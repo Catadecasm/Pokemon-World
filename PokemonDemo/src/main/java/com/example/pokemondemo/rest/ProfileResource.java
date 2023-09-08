@@ -59,23 +59,7 @@ public class ProfileResource {
 
     // S05 - Get all pokemon of a trainer (with pagination)
 
-    @GetMapping("/{username}/AllPokemons")
-    public ResponseEntity<?> getFollows(HttpServletRequest request,
-                                        @PathVariable(name = "username") String username,
-                                        @RequestParam(name = "offset", required = true) int offset,
-                                        @RequestParam(name = "quantity", required = true) int quantity) {
-        String header = request.getHeader("Authorization");
-        String jwt = header.substring(7);
-        String userEmail = jwtService.getUserEmail(jwt);
-        if (userEmail != null) {
-            try {
-                return ResponseEntity.ok().body(pokemonService.findAllByFollow(userEmail, username, quantity, offset, null, null));
-            } catch (NotFoundException e) {
-                return ResponseEntity.badRequest().body(e.getMessage());
-            }
-        }
-        return ResponseEntity.badRequest().body("User not found");
-    }
+
 
     // s06 cure pokemons
     @PostMapping("/{username}/cure")

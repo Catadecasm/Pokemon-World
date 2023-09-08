@@ -28,35 +28,4 @@ public class TypeResource {
         this.typeService = typeService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<TypeDTO>> getAllTypes() {
-        return ResponseEntity.ok(typeService.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<TypeDTO> getType(@PathVariable(name = "id") final Integer id) {
-        return ResponseEntity.ok(typeService.get(id));
-    }
-
-    @PostMapping
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<Integer> createType(@RequestBody @Valid final TypeDTO typeDTO) {
-        final Integer createdId = typeService.create(typeDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Integer> updateType(@PathVariable(name = "id") final Integer id,
-            @RequestBody @Valid final TypeDTO typeDTO) {
-        typeService.update(id, typeDTO);
-        return ResponseEntity.ok(id);
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteType(@PathVariable(name = "id") final Integer id) {
-        typeService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
 }

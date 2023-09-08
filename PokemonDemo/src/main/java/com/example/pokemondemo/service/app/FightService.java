@@ -55,17 +55,17 @@ public class FightService {
         if(!userRepository.existsByUsernameIgnoreCase(fightDTO.getOpponent_1().getUsername()) || !userRepository.existsByUsernameIgnoreCase(fightDTO.getOpponent_2().getUsername())){
             throw new NotFoundException("One or both of the given trainers does not exist");
         }
-        if(!user.getUsername().equals(fightDTO.getOpponent_1().getUsername()) && !user.getUsername().equals(fightDTO.getOpponent_2().getUsername())){
+        if(!user.getRealUsername().equals(fightDTO.getOpponent_1().getUsername()) && !user.getRealUsername().equals(fightDTO.getOpponent_2().getUsername())){
             throw new NotFoundException("The given fight is not a fight made by you");
         }
-        if(user.getUsername().equals(fightDTO.getOpponent_1().getUsername()) && user.getUsername().equals(fightDTO.getOpponent_2().getUsername())){
+        if(user.getRealUsername().equals(fightDTO.getOpponent_1().getUsername()) && user.getRealUsername().equals(fightDTO.getOpponent_2().getUsername())){
             throw new NotFoundException("You can't fight yourself");
         }
         if(!leagueRepository.existsByNameIgnoreCase(fightDTO.getLeague())){
             throw new NotFoundException("The given league does not exist");
         }
 
-        if(user.getUsername().equals(fightDTO.getOpponent_1().getUsername())){
+        if(user.getRealUsername().equals(fightDTO.getOpponent_1().getUsername())){
             User you = userRepository.findByUsernameIgnoreCase(fightDTO.getOpponent_1().getUsername());
             User opponent = userRepository.findByUsernameIgnoreCase(fightDTO.getOpponent_2().getUsername());
             if(!you.getLeagueid().equals(opponent.getLeagueid())){
@@ -129,7 +129,7 @@ public class FightService {
         if(!userRepository.existsByUsernameIgnoreCase(username)){
             throw new NotFoundException("The given trainer does not exist");
         }
-        if(!user.getUsername().equals(username)){
+        if(!user.getRealUsername().equals(username)){
             if(followRepository.findFollowByFollowedAndFollower(search, user) == null){
                 throw new NotFoundException("You are not following the given trainer");
             }else{

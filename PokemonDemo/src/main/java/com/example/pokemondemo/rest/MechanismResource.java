@@ -28,36 +28,6 @@ public class MechanismResource {
         this.mechanismService = mechanismService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<MechanismDTO>> getAllMechanisms() {
-        return ResponseEntity.ok(mechanismService.findAll());
-    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MechanismDTO> getMechanism(@PathVariable(name = "id") final Integer id) {
-        return ResponseEntity.ok(mechanismService.get(id));
-    }
-
-    @PostMapping
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<Integer> createMechanism(
-            @RequestBody @Valid final MechanismDTO mechanismDTO) {
-        final Integer createdId = mechanismService.create(mechanismDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Integer> updateMechanism(@PathVariable(name = "id") final Integer id,
-            @RequestBody @Valid final MechanismDTO mechanismDTO) {
-        mechanismService.update(id, mechanismDTO);
-        return ResponseEntity.ok(id);
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteMechanism(@PathVariable(name = "id") final Integer id) {
-        mechanismService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
 
 }

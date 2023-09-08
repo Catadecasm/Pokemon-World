@@ -51,35 +51,5 @@ public class UserResource {
         return ResponseEntity.ok(logOutResponse);
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable(name = "id") final Integer id) {
-        return ResponseEntity.ok(userService.get(id));
-    }
-
-    @PostMapping
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<Integer> createUser(@RequestBody @Valid final UserDTO userDTO) {
-        final Integer createdId = userService.create(userDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Integer> updateUser(@PathVariable(name = "id") final Integer id,
-                                              @RequestBody @Valid final UserDTO userDTO) {
-        userService.update(id, userDTO);
-        return ResponseEntity.ok(id);
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteUser(@PathVariable(name = "id") final Integer id) {
-        userService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
 
 }
