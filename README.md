@@ -1,32 +1,27 @@
-# Guía para Desplegar Pokemon-World
+# Documentación de la API de Pokedex - Profiles
+Esta documentación describe las funcionalidades relacionadas con la autenticación en la plataforma Pokedex. Los usuarios pueden registrarse, iniciar sesión y cerrar sesión en la aplicación.
 
-Podrás encontrar diferentes funcionalidades dependiento el tipo de usuario que seas, desde una autenticación hasta un combate de peleas! Descúbrelo!
+## S04 Follow & unfollow another Trainer - AC
 
-## Requisitos
+- AC1: follow other pokémon trainer
+- AC2: unfollow other pokémon trainer
+- AC3: Unfollow the pokémon trainer that is not following
+ 
 
-Asegúrate de tener instalados los siguientes requisitos previos antes de comenzar:
+## S05 Watch all pokémons from a Trainer - AC
 
-- Java JDK: Debes tener Java instalado en tu máquina.
-- Maven: Debes tener Maven instalado en tu máquina.
-- Tu aplicación Spring Boot lista para ser desplegada. Puedes crear una aplicación Spring Boot utilizando Spring Initializr.
-Lo único que necesitarás para abrir un documento Markdown es un editor de texto plano.
+- AC1: See all the pokémon of another trainer 
+- AC2: Filter the pokémon of another pokémon trainer 
+- AC3: Sort the pokémon of another pokémon trainer 
+- AC4: Paginate the pokémon of another pokémon trainer 
+- AC5. Receive an unauthorized code response when I don't follow a pokémon trainer  
 
 
-## Pasos para Desplegar la Aplicación
+## s05: Watch all pokémons as Professor Oak - AC
 
-### Paso 1: Empaquetar la Aplicación
-
-Usa Maven para empaquetar tu aplicación Spring Boot. Abre una terminal y navega al directorio raíz de tu proyecto y ejecuta el siguiente comando:
-
-`mvn clean package`
-
-Este comando compilará tu proyecto y creará un archivo JAR ejecutable en el directorio target.
-
-### Paso 2: Ejecutar la Aplicación
-
-Para ejecutar la aplicación, simplemente utiliza el comando java -jar seguido del nombre del archivo JAR.
-
-### Paso 3: Acceder a la Aplicación
-Una vez que la aplicación se haya iniciado correctamente, puedes acceder a ella en tu navegador web utilizando la URL http://localhost:puerto. Por defecto, Spring Boot ejecuta la aplicación en el puerto 8080
-
+- AC1: See all the pokémon of a pokémon trainer 
+- AC2: Filter the pokémon of another pokémon trainer 
+- AC3: Sort the pokémon of another pokémon trainer 
+- AC4: Paginate the pokémon of another pokémon trainer 
+- AC5. Receive an unauthorized code response when I don't follow a pokémon trainer  
 
