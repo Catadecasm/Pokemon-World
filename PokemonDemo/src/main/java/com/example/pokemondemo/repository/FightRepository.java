@@ -14,5 +14,6 @@ public interface FightRepository extends JpaRepository<Fight, Integer> {
 
     List<Fight> findAllByUserFightUsers(User user);
     List<Fight> findAllByUserFightUsers(User userFightUsers, Pageable pageable);
+    boolean existsById(Integer id);
 
 }

@@ -5,6 +5,7 @@ import com.example.pokemondemo.domain.Medals;
 import com.example.pokemondemo.domain.User;
 import com.example.pokemondemo.model.payload.request.AddMedalDTO;
 import com.example.pokemondemo.model.payload.response.MedalResponseDTO;
+import com.example.pokemondemo.repository.FightRepository;
 import com.example.pokemondemo.repository.MedalsRepository;
 import com.example.pokemondemo.repository.UserRepository;
 import com.example.pokemondemo.util.*;
@@ -16,11 +17,13 @@ public class MedalsService {
 
     private final MedalsRepository medalsRepository;
     private final UserRepository userRepository;
+    private final FightRepository fightRepository;
 
     public MedalsService(final MedalsRepository medalsRepository,
-            final UserRepository userRepository) {
+                         final UserRepository userRepository, FightRepository fightRepository) {
         this.medalsRepository = medalsRepository;
         this.userRepository = userRepository;
+        this.fightRepository = fightRepository;
     }
 
     public boolean titleExists(final String title) {
@@ -29,6 +32,9 @@ public class MedalsService {
 
     public MedalResponseDTO addmedal(String userEmail, AddMedalDTO addMedalDTO) {
         User user = userRepository.findByEmailIgnoreCase(userEmail).get();
+        if(!fightRepository.existsById(addMedalDTO.getFight_id())){
+            throw new NotFoundException("Fight not found");
+        }
         Integer rounds_won = addMedalDTO.getWinner().getRounds_won();
         Integer rounds_lost = addMedalDTO.getWinner().getRounds_lost();
         Integer rounds_played = addMedalDTO.getWinner().getRounds();
