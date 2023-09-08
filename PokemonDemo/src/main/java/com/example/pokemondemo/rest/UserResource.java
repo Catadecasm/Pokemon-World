@@ -1,20 +1,15 @@
 package com.example.pokemondemo.rest;
 
-import com.example.pokemondemo.model.DataBase.UserDTO;
 import com.example.pokemondemo.model.authDTO.request.LogInRequest;
 import com.example.pokemondemo.model.authDTO.request.SingUpRequest;
 import com.example.pokemondemo.model.authDTO.response.LogInResponse;
 import com.example.pokemondemo.model.authDTO.response.LogOutResponse;
-import com.example.pokemondemo.model.authDTO.response.SingUpResponse;
 import com.example.pokemondemo.service.app.UserService;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import com.example.pokemondemo.service.security.JWTService;
+import com.example.pokemondemo.util.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-
-import java.util.List;
 
 import org.apache.logging.log4j.message.StringFormattedMessage;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,19 +20,30 @@ import org.springframework.web.bind.annotation.*;
 public class UserResource {
 
     private final UserService userService;
+    private final JWTService jwtService;
 
-    public UserResource(final UserService userService) {
+    public UserResource(final UserService userService, JWTService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUpUser(@RequestBody SingUpRequest singUpRequest) {
-        return ResponseEntity.ok(userService.signUpUser(singUpRequest));
+        try {
+            return ResponseEntity.ok(userService.signUpUser(singUpRequest));
+        } catch (NotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LogInResponse> logInUser(@RequestBody LogInRequest logInRequest) {
-        return ResponseEntity.ok(userService.logInUser(logInRequest));
+    public ResponseEntity<?> logInUser(HttpServletRequest request, @RequestBody LogInRequest logInRequest) {
+
+        try {
+            return ResponseEntity.ok(userService.logInUser(logInRequest));
+        } catch (NotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/logout")

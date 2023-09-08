@@ -19,6 +19,8 @@ import jakarta.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -56,8 +58,19 @@ public class UserService {
     }
 
     public SingUpResponse signUpUser(SingUpRequest signUpRequest) {
-        Role role = DefineRole(signUpRequest.getRole());
+        Role role = null;
+        try {
+            role = DefineRole(signUpRequest.getRole());
 
+        } catch (NotFoundException e) {
+            throw new NotFoundException("The role does not exist");
+        }
+        String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(signUpRequest.getEmail());
+        if (!matcher.matches()) {
+            throw new NotFoundException("The email is not valid");
+        }
         User user = User.builder()
                 .username(signUpRequest.getUsername())
                 .email(signUpRequest.getEmail())
@@ -70,7 +83,12 @@ public class UserService {
                 .followerFollows(new HashSet<Follow>())
                 .followedFollows(new HashSet<Follow>())
                 .build();
-        Integer id = userRepository.save(user).getId();
+        Integer id = null;
+        try {
+            id = userRepository.save(user).getId();
+        } catch (Exception e) {
+            throw new NotFoundException("The username or email already exists");
+        }
         return SingUpResponse.builder()
                 .username(user.getRealUsername())
                 .email(user.getEmail())
@@ -81,7 +99,7 @@ public class UserService {
 
     private Role DefineRole(String role) {
         if (role == null) {
-            return Role.TRAINER;
+            throw new NotFoundException("The role does not exist");
         }
         role = role.toUpperCase();
         switch (role) {
@@ -91,12 +109,19 @@ public class UserService {
                 return Role.DOCTOR;
             case "PROFESSOR":
                 return Role.PROFESSOR;
-            default:
+            case "TRAINER":
                 return Role.TRAINER;
+            default:
+                throw new NotFoundException("The role does not exist");
         }
     }
 
     public LogInResponse logInUser(LogInRequest logInRequest) {
+        /*
+        User user1 = userRepository.findByEmailIgnoreCase(email).get();
+        if(user1.isLogged()){
+            throw new NotFoundException("The user is already logged");
+        }*/
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken
                         (logInRequest.getEmail()
