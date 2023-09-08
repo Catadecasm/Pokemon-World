@@ -1,5 +1,5 @@
 # Documentación de la API de Pokedex - Profiles
-Esta documentación describe las funcionalidades relacionadas con la autenticación en la plataforma Pokedex. Los usuarios pueden registrarse, iniciar sesión y cerrar sesión en la aplicación.
+Esta documentación describe las siguientes características relacionadas con el seguimiento de otros entrenadores, la visualización de los pokémon de otros entrenadores, la curación de pokémon como un doctor y la administración de perfiles
 
 ## S04 Follow & unfollow another Trainer - AC
 
