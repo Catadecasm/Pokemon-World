@@ -25,3 +25,15 @@ Esta documentación describe las funcionalidades relacionadas con la autenticaci
 - AC4: Paginate the pokémon of another pokémon trainer 
 - AC5. Receive an unauthorized code response when I don't follow a pokémon trainer  
 
+
+## S06: Cure pokémons as pokémons doctor - AC
+
+- AC1: Cure a pokémon of a specific pokémon trainer
+- AC2. Receive an unauthorized code response when I am not a doctor
+
+## S07: Administrate profiles - AC
+
+- AC1: Change pokémon trainer to professor Oak
+- AC2: Change pokémon trainer to doctor
+- AC3: Change pokémon trainer to admin
+- AC4: invalid user uses the admin request
