@@ -1,6 +1,6 @@
 package com.example.pokemondemo.repository;
 
-import com.example.pokemondemo.domain.User;
+import com.example.pokemondemo.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

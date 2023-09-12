@@ -1,12 +1,10 @@
 package com.example.pokemondemo.repository;
 
 
-import com.example.pokemondemo.domain.Pokemon;
-import com.example.pokemondemo.domain.Type;
-import com.example.pokemondemo.domain.User;
+import com.example.pokemondemo.entity.Pokemon;
+import com.example.pokemondemo.entity.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 

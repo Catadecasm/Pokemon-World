@@ -1,7 +1,7 @@
 package com.example.pokemondemo.repository;
 
 
-import com.example.pokemondemo.domain.League;
+import com.example.pokemondemo.entity.League;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

@@ -1,7 +1,7 @@
 package com.example.pokemondemo.repository;
 
 
-import com.example.pokemondemo.domain.Medals;
+import com.example.pokemondemo.entity.Medals;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

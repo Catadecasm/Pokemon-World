@@ -1,8 +1,8 @@
 package com.example.pokemondemo.config.security;
 
-import com.example.pokemondemo.domain.User;
+import com.example.pokemondemo.entity.User;
 import com.example.pokemondemo.repository.UserRepository;
-import com.example.pokemondemo.service.security.JWTService;
+import com.example.pokemondemo.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
