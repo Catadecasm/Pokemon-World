@@ -94,4 +94,4 @@ mvn spring-boot:run
 
 ## Documentation
 
-In the [documentation](https://github.com/Catadecasm/Pokemon-World/tree/develop/PokemonDemo/src/main/java/com/example/pokemondemo/documentation) you can find everything related to the project structure, git strategy, Epics, Features, Unit Test and so on. 
+In the documentation you can find everything related to the project structure, git strategy, Epics, Features, Unit Test and so on. 
