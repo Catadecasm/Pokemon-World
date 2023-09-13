@@ -119,7 +119,48 @@ class PokemonDemoApplicationTests {
             pokemonRepository.save(pokemonToSave);
         }).isInstanceOf(DataIntegrityViolationException.class);
     }
+
+    @Test
+    public void Save_MultiplePokemonForUser() {
+        // Crear un usuario
+        User user = userRepository.findByEmailIgnoreCase("willy@endava.com").get();
+
+        // Crear el primer Pokemon
+        PokemonDTO firstPokemonDTO = PokemonDTO.builder()
+                .name("my little fire")
+                .specie("charmander")
+                .build();
+
+        Pokemon firstPokemonToSave = Pokemon.builder()
+                .name(firstPokemonDTO.getName())
+                .specie(firstPokemonDTO.getSpecie())
+                .user(user)
+                .image("dasd")
+                .build();
+        firstPokemonToSave = pokemonRepository.save(firstPokemonToSave);
+
+        // Crear el segundo Pokemon
+        PokemonDTO secondPokemonDTO = PokemonDTO.builder()
+                .name("Pikachu")
+                .specie("Electric")
+                .build();
+
+        Pokemon secondPokemonToSave = Pokemon.builder()
+                .name(secondPokemonDTO.getName())
+                .specie(secondPokemonDTO.getSpecie())
+                .user(user)
+                .image("pikachu.png")
+                .build();
+        secondPokemonToSave = pokemonRepository.save(secondPokemonToSave);
+
+        // Verificar que ambos Pokemon se han guardado correctamente
+        assertThat(firstPokemonToSave).isNotNull();
+        assertThat(firstPokemonToSave.getId()).isGreaterThan(0);
+        assertThat(secondPokemonToSave).isNotNull();
+        assertThat(secondPokemonToSave.getId()).isGreaterThan(0);
+    }
 }
+
 
 
 
