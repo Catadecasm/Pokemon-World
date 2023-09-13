@@ -65,19 +65,15 @@ class PokemonDemoApplicationTests {
         Assertions.assertThat(pokemonSave.getId()).isGreaterThan(0);
     }
 
+    //Test to verify that the Pokemon object is correctly stored in the database and can be retrieved correctly
     @Test
     @Transactional
     public void SaveAndRetrieve_Pokemon() {
-        // Crear un usuario
         User user = userRepository.findByEmailIgnoreCase("willy@endava.com").get();
-
-        // Crear un Pokemon DTO
         PokemonDTO pokemonDTO = PokemonDTO.builder()
                 .name("my little fire")
                 .specie("charmander")
                 .build();
-
-        // Guardar el Pokemon en la base de datos
         Pokemon pokemonToSave = Pokemon.builder()
                 .name(pokemonDTO.getName())
                 .specie(pokemonDTO.getSpecie())
@@ -86,10 +82,8 @@ class PokemonDemoApplicationTests {
                 .build();
         pokemonToSave = pokemonRepository.save(pokemonToSave);
 
-        // Recuperar el Pokemon de la base de datos
         Pokemon retrievedPokemon = pokemonRepository.findById(pokemonToSave.getId()).orElse(null);
 
-        // Verificar que el Pokemon se ha recuperado correctamente
         assertThat(retrievedPokemon).isNotNull();
         assertThat(retrievedPokemon.getName()).isEqualTo(pokemonDTO.getName());
         assertThat(retrievedPokemon.getSpecie()).isEqualTo(pokemonDTO.getSpecie());
@@ -97,18 +91,17 @@ class PokemonDemoApplicationTests {
         assertThat(retrievedPokemon.getUser()).isEqualTo(user);
     }
 
+    // Test to verify that you cannot save a Pokemon with a null name
     @Test
     public void Save_PokemonWithNullName_ShouldThrowException() {
-        // Crear un usuario
+
         User user = userRepository.findByEmailIgnoreCase("willy@endava.com").get();
 
-        // Crear un Pokemon DTO con nombre nulo
         PokemonDTO pokemonDTO = PokemonDTO.builder()
                 .name(null)
                 .specie("charmander")
                 .build();
 
-        // Intentar guardar un Pokemon con nombre nulo
         assertThatThrownBy(() -> {
             Pokemon pokemonToSave = Pokemon.builder()
                     .name(pokemonDTO.getName())
@@ -120,12 +113,10 @@ class PokemonDemoApplicationTests {
         }).isInstanceOf(DataIntegrityViolationException.class);
     }
 
+    //Test to verify that multiple Pokemon can be saved for the same user
     @Test
     public void Save_MultiplePokemonForUser() {
-        // Crear un usuario
         User user = userRepository.findByEmailIgnoreCase("willy@endava.com").get();
-
-        // Crear el primer Pokemon
         PokemonDTO firstPokemonDTO = PokemonDTO.builder()
                 .name("my little fire")
                 .specie("charmander")
@@ -139,7 +130,6 @@ class PokemonDemoApplicationTests {
                 .build();
         firstPokemonToSave = pokemonRepository.save(firstPokemonToSave);
 
-        // Crear el segundo Pokemon
         PokemonDTO secondPokemonDTO = PokemonDTO.builder()
                 .name("Pikachu")
                 .specie("Electric")
@@ -153,7 +143,6 @@ class PokemonDemoApplicationTests {
                 .build();
         secondPokemonToSave = pokemonRepository.save(secondPokemonToSave);
 
-        // Verificar que ambos Pokemon se han guardado correctamente
         assertThat(firstPokemonToSave).isNotNull();
         assertThat(firstPokemonToSave.getId()).isGreaterThan(0);
         assertThat(secondPokemonToSave).isNotNull();
