@@ -17,7 +17,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.pokemondemo.service.pokeapi.PokedexPokemonSpecServiceImplService;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -93,6 +96,30 @@ class PokemonDemoApplicationTests {
         assertThat(retrievedPokemon.getImage()).isEqualTo("dasd");
         assertThat(retrievedPokemon.getUser()).isEqualTo(user);
     }
+
+    @Test
+    public void Save_PokemonWithNullName_ShouldThrowException() {
+        // Crear un usuario
+        User user = userRepository.findByEmailIgnoreCase("willy@endava.com").get();
+
+        // Crear un Pokemon DTO con nombre nulo
+        PokemonDTO pokemonDTO = PokemonDTO.builder()
+                .name(null)
+                .specie("charmander")
+                .build();
+
+        // Intentar guardar un Pokemon con nombre nulo
+        assertThatThrownBy(() -> {
+            Pokemon pokemonToSave = Pokemon.builder()
+                    .name(pokemonDTO.getName())
+                    .specie(pokemonDTO.getSpecie())
+                    .user(user)
+                    .image("dasd")
+                    .build();
+            pokemonRepository.save(pokemonToSave);
+        }).isInstanceOf(DataIntegrityViolationException.class);
+    }
 }
+
 
 
