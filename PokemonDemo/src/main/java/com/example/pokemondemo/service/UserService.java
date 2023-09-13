@@ -142,10 +142,13 @@ public class UserService {
     }
 
     public LogOutResponse logOutUser(String token) {
-        LogOutResponse logInResponse = null;
+        LogOutResponse logOutResponse = null;
+
+        // Verificar si el usuario está autenticado
         if (this.authenticatedUser == null || !this.authenticatedUser.isLogged()) {
-            return logInResponse;
+            throw new NotFoundException("User not found");
         }
+
         if (token != null && SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             String userEmail = jwtService.getUserEmail(token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
@@ -157,7 +160,7 @@ public class UserService {
                             .orElseThrow((NotFoundException::new));
                     user.setLogged(false);
                     userRepository.save(user);
-                    logInResponse = new LogOutResponse("ok");
+                    logOutResponse = new LogOutResponse("ok");
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authToken);
@@ -167,7 +170,7 @@ public class UserService {
                 }
             }
         }
-        return logInResponse;
+        return logOutResponse;
     }
 
     public ClassicResponseDTO changeRole(String emailUser, ChangeRoleDTO changeRoleDTO) {
