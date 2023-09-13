@@ -1,14 +1,12 @@
 package com.example.pokemondemo.model.authorization;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class LogInRequest {
         private String email;
         private String password;
