@@ -45,6 +45,18 @@ class LoginTest {
         assertThat(exception.getMessage()).isEqualTo("Bad credentials");
     }
 
+    @Test
+    void Validate_Invalid_Password() {
+        LogInRequest logInRequest = LogInRequest.builder()
+                .email("hola@endava.com")
+                .password("123467")
+                .build();
+        Exception exception = assertThrows(Exception.class, () -> userService.logInUser(logInRequest));
+        assertThat(exception.getMessage()).isEqualTo("Bad credentials");
+    }
+
+    
+
     @AfterAll
     public static void cleanUp(@Autowired UserRepository userRepository) {
         List<User> users = userRepository.findAll();
