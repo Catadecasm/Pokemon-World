@@ -29,9 +29,7 @@ class PokemonDemoApplicationTests {
     @Test
     void contextLoads() {
 
-    }
-    @BeforeAll
-    public void init(){
+
     }
     @Test
     public void Save_Pokemon(){
@@ -41,17 +39,11 @@ class PokemonDemoApplicationTests {
                 .specie("charmander")
                 .build();
         User user =  userRepository.findByEmailIgnoreCase("willy@endava.com").get();
-        SingleEsPokemonDTO pokemon = null;
-        try {
-            pokemon = pokedexPokemonSpecServiceImpl.getEsPokemon(pokemonDTO.getSpecie(), "en");
-        } catch (Exception e) {
-            throw new NotFoundException("The pokemon does not exist");
-        }
         Pokemon pokemonSave = Pokemon.builder()
                 .name(pokemonDTO.getName())
-                .specie(pokemon.getName())
+                .specie(pokemonDTO.getName())
                 .user(user)
-                .image(pokemon.getImg_path())
+                .image("dasd")
                 .build();
         pokemonSave = pokemonRepository.save(pokemonSave);
         Assertions.assertThat(pokemonSave).isNotNull();
