@@ -13,7 +13,7 @@ In the project structure the MVC is reflected in the following way:
 - Controller: [Service](https://github.com/Catadecasm/Pokemon-World/tree/develop/PokemonDemo/src/main/java/com/example/pokemondemo/service)
 
 The base classes with which we developed this project can be found in our [ER diagram]().
-<p align="center"><img src="C:\Users\jude\Documents\pk3\Pokemon-World\PokemonDemo\documentation\ErDiagram.jpg" alt="ErDiagram"></p>
+<p align="center"><img src="C:\Users\jude\Documents\pk3\Pokemon-World\PokemonDemo\documentation\Diagram.png" alt="ErDiagram"></p>
 
 
 
