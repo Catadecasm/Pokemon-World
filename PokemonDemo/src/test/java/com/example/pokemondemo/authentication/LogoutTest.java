@@ -1,6 +1,8 @@
 package com.example.pokemondemo.authentication;
 
 import com.example.pokemondemo.exception.NotFoundException;
+import com.example.pokemondemo.model.authorization.LogInRequest;
+import com.example.pokemondemo.model.authorization.LogInResponse;
 import com.example.pokemondemo.model.authorization.LogOutResponse;
 import com.example.pokemondemo.service.UserService;
 import org.junit.jupiter.api.AfterAll;
@@ -23,8 +25,13 @@ class LogoutTest {
 
     @Test
     void testLogOutUser_Success() {
+        LogInRequest logInRequest = LogInRequest.builder()
+                .email("hola@endava.com")
+                .password("123456")
+                .build();
+        LogInResponse logInResponse =  userService.logInUser(logInRequest);
         // Arrange
-        String validToken = "validToken";
+        String validToken = logInResponse.getToken();
 
         // Act
         LogOutResponse logOutResponse = userService.logOutUser(validToken);
