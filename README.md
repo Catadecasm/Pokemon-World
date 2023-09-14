@@ -1,4 +1,4 @@
-<p align="center"><img src="PokemonDemo\src\main\java\com\example\pokemondemo\documentation\viewavatar.png"></p>
+<p align="center"><img src="PokemonDemo\documentation\viewavatar.png"></p>
 <h1 align="center">Pokemon-World!</h1>
 
 <div align="center">
