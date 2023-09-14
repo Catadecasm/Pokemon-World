@@ -149,7 +149,7 @@ public class UserService {
             throw new NotFoundException("User not found");
         }
 
-        if (token != null && SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+        if (token != null) {
             String userEmail = jwtService.getUserEmail(token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if (userDetails != null) {
