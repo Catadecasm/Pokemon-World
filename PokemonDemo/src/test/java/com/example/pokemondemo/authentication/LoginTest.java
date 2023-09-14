@@ -37,8 +37,8 @@ class LoginTest {
     @Test
     void Validate_User_Not_Found() {
         LogInRequest logInRequest = LogInRequest.builder()
-                .email("hola@endava.com")
-                .password("12346")
+                .email("hol@endava.com")
+                .password("123456")
                 .build();
 
         Exception exception = assertThrows(Exception.class, () -> userService.logInUser(logInRequest));
