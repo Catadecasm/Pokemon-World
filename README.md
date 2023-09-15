@@ -1,4 +1,4 @@
-<p align="center"><img src="PokemonDemo\src\main\java\com\example\pokemondemo\documentation\viewavatar.png"></p>
+<p align="center"><img src="PokemonDemo\documentation\viewavatar.png"></p>
 <h1 align="center">Pokemon-World!</h1>
 
 <div align="center">
@@ -15,15 +15,15 @@
       Contributors
     </a>
     <span> | </span>
-	    <a href="#features">
+	    <a href="#How to clone the repository?">
       Repository
     </a>
     <span> | </span>
-	    <a href="#How to clone the repository?">
+	    <a href="#How to Run the Project">
       Build
     </a>
     <span> | </span>
-	    <a href="#How to Run the Project">
+	    <a href="https://github.com/Catadecasm/Pokemon-World/blob/develop/PokemonDemo/documentation/Documentation.md">
       Documentation
     </a>
     <span> | </span>
@@ -95,3 +95,4 @@ mvn spring-boot:run
 ## Documentation
 
 In the ¨[documentation](https://github.com/Catadecasm/Pokemon-World/tree/develop/PokemonDemo/src/main/java/com/example/pokemondemo/documentation) you can find everything related to the project structure, git strategy, Epics, Features, Unit Test and so on. 
+
