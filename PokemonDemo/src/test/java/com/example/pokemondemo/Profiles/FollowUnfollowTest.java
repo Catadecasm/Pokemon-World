@@ -49,4 +49,11 @@ class FollowUnfollowTest {
         assertThat(response.getResponseCode()).isEqualTo("OK");
         assertThat(response.getResponseMessage()).isEqualTo("willy is not following andy anymore");
     }
+
+    @Test
+    public void followShouldSucceed() {
+        ClassicResponseDTO response = followService.follow("willy@endava.com", "andy");
+        assertThat(response.getResponseCode()).isEqualTo("OK");
+        assertThat(response.getResponseMessage()).isEqualTo("willy is now following andy");
+    }
 }
