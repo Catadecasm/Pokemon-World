@@ -62,4 +62,11 @@ class FollowUnfollowTest {
         NotFoundException exception = assertThrows(NotFoundException.class, () -> followService.follow("willy@endava.com", "andy"));
         assertThat(exception.getMessage()).isEqualTo("You are already following this trainer");
     }
+
+    @Test
+    public void unfollowShouldSucceed() {
+        ClassicResponseDTO response = followService.unfollow("willy@endava.com", "andy");
+        assertThat(response.getResponseCode()).isEqualTo("OK");
+        assertThat(response.getResponseMessage()).isEqualTo("willy is not following andy anymore");
+    }
 }
