@@ -132,5 +132,13 @@ class WatchAllPokemonTest {
 
         assertThat(response1.getResult()).doesNotContainAnyElementsOf(response2.getResult());
     }
+    @Test
+    public void WatchAllWithValidTrainerAndMaxQuantityShouldReturnAllAvailablePokemons() {
+        TrainerPokedexDTO response = pokemonService.findAllByFollow("willy@endava.com", "willy", Integer.MAX_VALUE, 0);
+        assertThat(response).isNotNull();
+        assertThat(response.getIndex()).isEqualTo(0);
+        assertThat(response.getQuantity()).isEqualTo(Integer.MAX_VALUE);
+        assertThat(response.getResult().size()).isLessThanOrEqualTo(Integer.MAX_VALUE);
+    }
 
 }
