@@ -140,5 +140,9 @@ class WatchAllPokemonTest {
         assertThat(response.getQuantity()).isEqualTo(Integer.MAX_VALUE);
         assertThat(response.getResult().size()).isLessThanOrEqualTo(Integer.MAX_VALUE);
     }
+    @Test
+    public void WatchAllWithNegativeQuantityShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> pokemonService.findAllByFollow("willy@endava.com", "willy", -1, 0));
+    }
 
 }
