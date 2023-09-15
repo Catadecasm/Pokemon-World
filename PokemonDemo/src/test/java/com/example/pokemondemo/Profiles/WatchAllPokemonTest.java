@@ -112,4 +112,8 @@ class WatchAllPokemonTest {
         assertThat(response.getQuantity()).isEqualTo(1000);
         assertThat(response.getResult().size()).isLessThanOrEqualTo(1000);
     }
+    @Test
+    public void WatchAllWithValidTrainerAndNegativeQuantityShouldThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> pokemonService.findAllByFollow("willy@endava.com", "willy", -1, 0));
+    }
 }
