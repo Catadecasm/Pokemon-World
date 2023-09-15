@@ -21,8 +21,9 @@ class WatchAllPokemonTest {
         assertThat(exception.getMessage()).isEqualTo("The trainer does not exist");
 
         exception = assertThrows(NotFoundException.class,  () -> pokemonService.findAllByFollow("willy@endava.com","satu",0,0));
-        assertThat(exception.getMessage()).isEqualTo("You don't follow this pokémon trainer");
-    }
+        assertThat(exception.getMessage()).isEqualTo("You don't follow this pokémon trainer,\n" +
+                " you have to be Professor to watch this information");
+}
 
     @Test
     public void WatchAllShouldReturnThePokemons(){
