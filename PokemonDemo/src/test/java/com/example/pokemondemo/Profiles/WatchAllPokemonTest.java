@@ -88,4 +88,20 @@ class WatchAllPokemonTest {
         assertThat(response2.getQuantity()).isEqualTo(5);
         assertThat(response2.getResult().size()).isEqualTo(5);
     }
+    @Test
+    public void WatchAllWithValidTrainerAndValidPaginationShouldReturnCorrectSubset() {
+        TrainerPokedexDTO response1 = pokemonService.findAllByFollow("willy@endava.com", "willy", 5, 0);
+        assertThat(response1).isNotNull();
+        assertThat(response1.getIndex()).isEqualTo(0);
+        assertThat(response1.getQuantity()).isEqualTo(5);
+        assertThat(response1.getResult().size()).isEqualTo(5);
+
+        TrainerPokedexDTO response2 = pokemonService.findAllByFollow("willy@endava.com", "willy", 5, 5);
+        assertThat(response2).isNotNull();
+        assertThat(response2.getIndex()).isEqualTo(5);
+        assertThat(response2.getQuantity()).isEqualTo(5);
+        assertThat(response2.getResult().size()).isEqualTo(5);
+
+        assertThat(response1.getResult()).doesNotContainAnyElementsOf(response2.getResult());
+    }
 }
