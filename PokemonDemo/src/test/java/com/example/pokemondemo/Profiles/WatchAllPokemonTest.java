@@ -45,4 +45,12 @@ class WatchAllPokemonTest {
         assertThat(exception.getMessage()).isEqualTo("You don't follow this pokémon trainer,\n" +
                 " you have to be Professor to watch this information");
     }
+    @Test
+    public void WatchAllWithValidTrainerShouldReturnPokemons() {
+        TrainerPokedexDTO response = pokemonService.findAllByFollow("willy@endava.com", "willy", 2, 0);
+        assertThat(response).isNotNull();
+        assertThat(response.getIndex()).isEqualTo(0);
+        assertThat(response.getQuantity()).isEqualTo(2);
+        assertThat(response.getResult().size()).isEqualTo(2);
+    }
 }
