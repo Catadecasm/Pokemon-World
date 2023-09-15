@@ -34,4 +34,9 @@ class WatchAllPokemonTest {
         assertThat(response.getResult().size()).isEqualTo(2);
     }
 
+    @Test
+    public void WatchAllWithInvalidTrainerShouldThrowNotFoundException() {
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> pokemonService.findAllByFollow("willy@endava.com", "notRealuser", 0, 0));
+        assertThat(exception.getMessage()).isEqualTo("The trainer does not exist");
+    }
 }
