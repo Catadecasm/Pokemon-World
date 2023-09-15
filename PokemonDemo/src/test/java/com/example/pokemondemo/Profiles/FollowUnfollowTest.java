@@ -79,4 +79,9 @@ class FollowUnfollowTest {
         NotFoundException exception = assertThrows(NotFoundException.class, () -> followService.follow("willy@endava.com", "marie"));
         assertThat(exception.getMessage()).isEqualTo("The trainer does not exist");
     }
+    @Test
+    public void unfollowNonExistentUserShouldThrowException() {
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> followService.unfollow("willy@endava.com", "marie"));
+        assertThat(exception.getMessage()).isEqualTo("The trainer does not exist");
+    }
 }
