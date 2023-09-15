@@ -56,4 +56,10 @@ class FollowUnfollowTest {
         assertThat(response.getResponseCode()).isEqualTo("OK");
         assertThat(response.getResponseMessage()).isEqualTo("willy is now following andy");
     }
+
+    @Test
+    public void followDuplicateShouldThrowException() {
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> followService.follow("willy@endava.com", "andy"));
+        assertThat(exception.getMessage()).isEqualTo("You are already following this trainer");
+    }
 }
