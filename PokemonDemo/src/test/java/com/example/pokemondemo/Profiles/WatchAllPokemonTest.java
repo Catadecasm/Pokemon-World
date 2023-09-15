@@ -104,4 +104,12 @@ class WatchAllPokemonTest {
 
         assertThat(response1.getResult()).doesNotContainAnyElementsOf(response2.getResult());
     }
+    @Test
+    public void WatchAllWithValidTrainerAndQuantityGreaterThanAvailablePokemonsShouldReturnAllAvailablePokemons() {
+        TrainerPokedexDTO response = pokemonService.findAllByFollow("willy@endava.com", "willy", 1000, 0);
+        assertThat(response).isNotNull();
+        assertThat(response.getIndex()).isEqualTo(0);
+        assertThat(response.getQuantity()).isEqualTo(1000);
+        assertThat(response.getResult().size()).isLessThanOrEqualTo(1000);
+    }
 }
