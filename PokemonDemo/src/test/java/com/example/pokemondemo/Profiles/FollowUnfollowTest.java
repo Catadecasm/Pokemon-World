@@ -69,4 +69,9 @@ class FollowUnfollowTest {
         assertThat(response.getResponseCode()).isEqualTo("OK");
         assertThat(response.getResponseMessage()).isEqualTo("willy is not following andy anymore");
     }
+    @Test
+    public void unfollowNonFollowerShouldThrowException() {
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> followService.unfollow("willy@endava.com", "andy"));
+        assertThat(exception.getMessage()).isEqualTo("The trainer is not followed by you");
+    }
 }
