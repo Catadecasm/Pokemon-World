@@ -27,7 +27,7 @@ public class PokemonResource {
     }
 
     @GetMapping("/{username}/AllPokemons")
-    public ResponseEntity<?> getFollows(HttpServletRequest request,
+    public ResponseEntity<?> getAllPokemons(HttpServletRequest request,
                                         @PathVariable(name = "username") String username,
                                         @RequestParam(name = "offset", required = true) int offset,
                                         @RequestParam(name = "quantity", required = true) int quantity) {

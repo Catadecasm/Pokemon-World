@@ -70,7 +70,7 @@ public class PokemonService {
             if (!user.getRealUsername().equals(followed.getRealUsername())){
                 Follow follow = followRepository.findFollowByFollowedAndFollower(followed, user);
                 if (follow == null) {
-                    throw new NotFoundException("You don't follow this pokémon trainer.");
+                    throw new NotFoundException("You don't follow this pokémon trainer,\n you have to be Professor to watch this information");
                 }
 
             }
@@ -189,13 +189,6 @@ public class PokemonService {
                 .build();
     }
 
-    public TrainerPokedexDTO getPokemons(String userEmail, Integer quantity, Integer offset, String username) {
-        User user = userRepository.findByEmailIgnoreCase(userEmail).get();
-        if (!user.getRealUsername().equals(username)) {
-            throw new NotFoundException("You can't get a pokemon to other trainer, If you want to, use the follow endpoint!");
-        }
-        return findAllByUser(username, quantity, offset);
-    }
 
     public Boolean updateMecha(String userEmail, MechanismsChangeDTO mechanismsChangeDTO) {
         User user = userRepository.findByEmailIgnoreCase(userEmail).get();
