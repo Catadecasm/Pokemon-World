@@ -161,6 +161,9 @@ public class PokemonService {
         if (pokemonRepository.findById(pokemonDTO.getId()).isEmpty()) {
             throw new NotFoundException("The pokemon does not exist, the id does not match with any pokemon");
         }
+        if(!pokemonRepository.existsByIdAndUser(pokemonDTO.getId(), user)){
+            throw new NotFoundException("The pokemon does not belong to the trainer");
+        }
         Pokemon pokemon = pokemonRepository.findById(pokemonDTO.getId()).get();
         pokemon.setName(pokemonDTO.getName());
         pokemonRepository.save(pokemon);
