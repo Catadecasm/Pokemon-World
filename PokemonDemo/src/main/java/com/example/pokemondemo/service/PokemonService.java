@@ -5,12 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.pokemondemo.entity.*;
-import com.example.pokemondemo.model.dto.PokemonDTO;
+import com.example.pokemondemo.model.dto.*;
 import com.example.pokemondemo.model.dto.pokeapi.AbilitiesDTO;
 import com.example.pokemondemo.model.dto.pokeapi.SingleEsPokemonDTO;
-import com.example.pokemondemo.model.dto.MechanismsChangeDTO;
-import com.example.pokemondemo.model.dto.ClassicResponseDTO;
-import com.example.pokemondemo.model.dto.TrainerPokedexDTO;
 import com.example.pokemondemo.repository.*;
 import com.example.pokemondemo.exception.*;
 import com.example.pokemondemo.service.pokeapi.PokedexPokemonSpecServiceImplService;
@@ -101,7 +98,7 @@ public class PokemonService {
         return pokemonDTO;
     }
 
-    public ClassicResponseDTO addNewPokemon(String userEmail, PokemonDTO pokemonDTO, String username) {
+    public ClassicResponseDTO addNewPokemon(String userEmail, PokemonRequestDTO pokemonDTO, String username) {
         User user = userRepository.findByEmailIgnoreCase(userEmail).get();
         if (!user.getRealUsername().equals(username)) {
             throw new NotFoundException("You can't add a pokemon to other trainer");
@@ -111,7 +108,6 @@ public class PokemonService {
             pokemon = pokedexPokemonSpecServiceImpl.getEsPokemon(pokemonDTO.getSpecie(), "en");
         } catch (Exception e) {
             throw new NotFoundException("The pokemon does not exist");
-
         }
         Pokemon pokemonSave = Pokemon.builder()
                 .name(pokemonDTO.getName())

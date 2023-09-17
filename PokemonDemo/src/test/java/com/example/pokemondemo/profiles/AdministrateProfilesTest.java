@@ -1,4 +1,4 @@
-package com.example.pokemondemo.Profiles;
+package com.example.pokemondemo.profiles;
 
 import com.example.pokemondemo.entity.User;
 import com.example.pokemondemo.exception.NotFoundException;
@@ -6,7 +6,6 @@ import com.example.pokemondemo.model.dto.ChangeRoleDTO;
 import com.example.pokemondemo.model.dto.ClassicResponseDTO;
 import com.example.pokemondemo.repository.UserRepository;
 import com.example.pokemondemo.service.UserService;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

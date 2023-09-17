@@ -2,6 +2,7 @@ package com.example.pokemondemo.controller.rest;
 
 import com.example.pokemondemo.model.dto.PokemonDTO;
 import com.example.pokemondemo.model.dto.MechanismsChangeDTO;
+import com.example.pokemondemo.model.dto.PokemonRequestDTO;
 import com.example.pokemondemo.service.PokemonService;
 import com.example.pokemondemo.service.JWTService;
 import com.example.pokemondemo.exception.NotFoundException;
@@ -45,11 +46,11 @@ public class PokemonResource {
     }
 
     @PostMapping("/pokemon-trainer/{username}/add-pokemon")
-    public ResponseEntity<?> addNewPokemon(HttpServletRequest request, @RequestBody PokemonDTO pokemonDTO, @PathVariable String username) {
+    public ResponseEntity<?> addNewPokemon(HttpServletRequest request, @RequestBody PokemonRequestDTO pokemonDTO, @PathVariable String username) {
         String header = request.getHeader("Authorization");
         String jwt = header.substring(7);
         String userEmail = jwtService.getUserEmail(jwt);
-        if (!isPokemonDTOValid(pokemonDTO)) {
+        if (!isPokemonRequestDTOValid(pokemonDTO)) {
             return ResponseEntity.badRequest().body("The json recived is not valid");
         }
         try {
@@ -102,6 +103,15 @@ public class PokemonResource {
     }
 
 
+    public static boolean isPokemonRequestDTOValid(PokemonRequestDTO pokemonDTO) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        // Realiza la validación del objeto PokemonDTO
+        Set<ConstraintViolation<PokemonRequestDTO>> violations = validator.validate(pokemonDTO);
+
+        // Si no hay violaciones, el PokemonDTO está bien armado
+        return violations.isEmpty();
+    }
     public static boolean isPokemonDTOValid(PokemonDTO pokemonDTO) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
