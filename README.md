@@ -84,15 +84,15 @@ Run the following command to compile the project.
 mvn clean install
 ```
 
-3. Run the Application:
+3. Run the Application with Heroku:
 
-Once successfully compiled, you can run the application using the following command.
+Once successfully compiled, you can run the application using the following [URL](https://pure-sands-54885-c60c4fd3c1bb.herokuapp.com):
 
-```bash
-mvn spring-boot:run
-```
+- https://pure-sands-54885-c60c4fd3c1bb.herokuapp.com
+
+
 
 ## Documentation
 
-In the ¨[documentation](https://github.com/Catadecasm/Pokemon-World/tree/develop/PokemonDemo/src/main/java/com/example/pokemondemo/documentation) you can find everything related to the project structure, git strategy, Epics, Features, Unit Test and so on. 
+In the [documentation](https://github.com/Catadecasm/Pokemon-World/tree/develop/PokemonDemo/src/main/java/com/example/pokemondemo/documentation) you can find everything related to the project structure, git strategy, Epics, Features and so on. 
 
