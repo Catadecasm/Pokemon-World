@@ -47,7 +47,8 @@ public class PokemonService {
                 throw new NotFoundException("The trainer does not exist");
             }
             Pokemon pokemon = pokemonRepository.findById(pokemonId).get();
-            if (pokemon.getUser().equals(trainer)) {
+
+            if (pokemonRepository.existsByIdAndUser(pokemonId, trainer)){
                 return ClassicResponseDTO.builder()
                         .ResponseCode("200")
                         .ResponseMessage("You have cured the " + pokemon.getName() + " of " + trainer.getRealUsername())

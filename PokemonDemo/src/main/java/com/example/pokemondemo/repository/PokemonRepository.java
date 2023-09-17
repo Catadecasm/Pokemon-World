@@ -12,5 +12,6 @@ import java.util.List;
 public interface PokemonRepository extends JpaRepository<Pokemon, Integer> {
     List<Pokemon> findAllByUser(User user, Pageable pageable);
     List<Pokemon> findAllByUser(User user);
+    boolean existsByIdAndUser(int id, User user);
 
 }
