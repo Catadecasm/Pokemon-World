@@ -33,7 +33,7 @@ class CurePokemonsTest {
     @Test
     public void CureShouldReturnOk() {
         ClassicResponseDTO response = pokemonService.curePokemon("drew@endava.com", 1, "willy");
-        assertThat(response.getResponseCode()).isEqualTo("200");
+        assertThat(response.getResponseCode()).isEqualTo("OK");
         assertThat(response.getResponseMessage()).isEqualTo("You have cured the " + "My bulbassaur" + " of " + "willy");
     }
 
