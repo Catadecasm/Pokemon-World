@@ -50,7 +50,7 @@ public class PokemonService {
 
             if (pokemonRepository.existsByIdAndUser(pokemonId, trainer)){
                 return ClassicResponseDTO.builder()
-                        .ResponseCode("200")
+                        .ResponseCode("OK")
                         .ResponseMessage("You have cured the " + pokemon.getName() + " of " + trainer.getRealUsername())
                         .build();
             }

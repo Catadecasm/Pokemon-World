@@ -193,7 +193,7 @@ public class UserService {
             userToChange.setRole(DefineRole(changeRoleDTO.getRole()));
             userRepository.save(userToChange);
             return ClassicResponseDTO.builder()
-                    .ResponseCode("200")
+                    .ResponseCode("OK")
                     .ResponseMessage("Role updated successfully")
                     .build();
         }
