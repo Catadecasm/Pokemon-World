@@ -1,4 +1,4 @@
-package com.example.pokemondemo.Profiles;
+package com.example.pokemondemo.profiles;
 
 
 import com.example.pokemondemo.exception.NotFoundException;
