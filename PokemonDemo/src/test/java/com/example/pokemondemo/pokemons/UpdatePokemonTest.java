@@ -73,4 +73,5 @@ class UpdatePokemonTest {
         assertThat(response.getResponseMessage()).isEqualTo("The pokemon " + pokemonDTO.getName() + " updated to willy");
         pokemonService.updatePokemon("willy@endava.com", pokemonDTO, "willy");
     }
+
 }
