@@ -64,4 +64,13 @@ class UpdatePokemonTest {
         pokemonDTO.setName("My bulbasaur");
         pokemonService.updatePokemon("willy@endava.com", pokemonDTO, "willy");
     }
+    @Test
+    public void updatePokemonShouldUpdateTypeTest() {
+        pokemonDTO.setId(1);
+        pokemonDTO.getType().add("Grass");
+        ClassicResponseDTO response = pokemonService.updatePokemon("willy@endava.com", pokemonDTO, "willy");
+        assertThat(response.getResponseCode()).isEqualTo("OK");
+        assertThat(response.getResponseMessage()).isEqualTo("The pokemon " + pokemonDTO.getName() + " updated to willy");
+        pokemonService.updatePokemon("willy@endava.com", pokemonDTO, "willy");
+    }
 }

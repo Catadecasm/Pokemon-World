@@ -28,13 +28,15 @@ class CurePokemonsTest {
         exception = assertThrows(NotFoundException.class, () -> pokemonService.curePokemon("drew@endava.com", 8, "willy"));
         assertThat(exception.getMessage()).isEqualTo("The pokemon does not belong to the trainer");
 
+
+
     }
 
     @Test
     public void CureShouldReturnOk() {
         ClassicResponseDTO response = pokemonService.curePokemon("drew@endava.com", 1, "willy");
         assertThat(response.getResponseCode()).isEqualTo("OK");
-        assertThat(response.getResponseMessage()).isEqualTo("You have cured the " + "My bulbassaur" + " of " + "willy");
+        assertThat(response.getResponseMessage()).isEqualTo("You have cured the " + "My bulbasaur" + " of " + "willy");
     }
 
 }
