@@ -70,9 +70,45 @@ The base classes with which we developed this project can be found in our [ER di
 
 ## Gitflow
 
+#### Main Branches:
+- main
+- deploy
+- develop
+
+#### Feature Branches:
+- test-s10
+- test-s09
+- test-s08
+- test-s05
+- test-s04
+- test-s03
+- test-s02
+#### Completion of Feature Branches:
+- develop
+
 ## License
 
 [MIT License](https://github.com/Catadecasm/Pokemon-World/blob/develop/LICENSE)
 
 ## Useful Links
 - https://pokeapi.co/api/v2/
+
+## Improvement areas
+
+#### User stories 
+- Problem: Bad user story scoring.
+- Suggestion: Review in detail the user stories, organize meetings with the development team and stakeholders to discuss the user stories, work on clarifying the requirements of the stories, perform estimations with a more complete view of the complexity of the tasks.
+
+#### Documentation
+- Problem: Insufficient and disorganized documentation.
+- Suggestion: Conduct an initial assessment, prioritization, reorganization and structuring of information. 
+
+#### Testing 
+- Problem: Test coverage was not achieved which may lead to the introduction of inadvertent bugs.
+- Suggestion: Set the time for testing to cover more usage scenarios and increase the reliability of the code.
+
+## Action Plan
+To address the issues of bad user story scoring, insufficient documentation, and inadequate test coverage, we will conduct a thorough review of user stories, engage in discussions with the development team and stakeholders to clarify requirements, and improve the estimation process. Additionally, we'll assess and reorganize our documentation, establish clear standards, and commit to continuous maintenance. For testing, we'll allocate dedicated time, focus on scenario-based testing, encourage collaboration, and aim for ongoing improvements to enhance test coverage and code reliability. These actions will help us streamline our development process and deliver higher-quality software.
+  
+
+
