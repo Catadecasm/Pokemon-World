@@ -1,6 +1,7 @@
 package com.example.pokemondemo.pokemons;
 
 import com.example.pokemondemo.exception.NotFoundException;
+import com.example.pokemondemo.model.dto.ClassicResponseDTO;
 import com.example.pokemondemo.repository.PokemonRepository;
 import com.example.pokemondemo.service.PokemonService;
 import org.junit.jupiter.api.Test;
@@ -35,5 +36,11 @@ class DeletePokemonTest {
         assertThat(pokemonRepository.findById(55)).isNotEmpty();
         pokemonService.deletePokemon("willy@endava.com",55,"willy");
         assertThat(pokemonRepository.findById(55)).isEmpty();
+    }
+    @Test
+    public void DeletePokemonShouldReturnErrorForNonExistentPokemonTest() {
+        int nonExistentPokemonId = 999;
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> pokemonService.deletePokemon("willy@endava.com", nonExistentPokemonId, "willy"));
+        assertThat(exception.getMessage()).isEqualTo("The pokemon does not exist, the id does not match with any pokemon");
     }
 }
