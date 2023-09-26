@@ -1,6 +1,6 @@
 spring:
   security:
-    csrf:
+    cors:
       disabled: true
   datasource:
     url: ${JDBC_DATABASE_URL:jdbc:mysql://root:YCErNaZZalpDxpCcZ0YN@containers-us-west-150.railway.app:5783/railway}
