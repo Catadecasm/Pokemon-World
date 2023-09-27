@@ -25,6 +25,13 @@ public class UserResource {
         this.userService = userService;
         this.jwtService = jwtService;
     }
+    @GetMapping("/get-user")
+    public ResponseEntity<?> getuser(HttpServletRequest request){
+        String header = request.getHeader("Authorization");
+        String token = header.substring(7);
+        String userEmail = jwtService.getUserEmail(token);
+        return ResponseEntity.ok(userService.getuser(userEmail));
+    }
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUpUser(@RequestBody SingUpRequest singUpRequest) {
@@ -36,7 +43,7 @@ public class UserResource {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> logInUser(HttpServletRequest request, @RequestBody LogInRequest logInRequest) {
+    public ResponseEntity<?> logInUser(@RequestBody LogInRequest logInRequest) {
 
         try {
             return ResponseEntity.ok(userService.logInUser(logInRequest));

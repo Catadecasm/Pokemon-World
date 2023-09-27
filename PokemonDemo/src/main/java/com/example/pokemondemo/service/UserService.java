@@ -200,4 +200,8 @@ public class UserService {
         throw new NotFoundException("You don't have not provided adequate credentials to access this resource");
     }
 
+    public User getuser(String userEmail) {
+        User user = userRepository.findByEmailIgnoreCase(userEmail).get();
+        return user;
+    }
 }
