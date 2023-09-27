@@ -1,11 +1,8 @@
 spring:
-  security:
-    cors:
-      disabled: true
   datasource:
-    url: ${JDBC_DATABASE_URL:jdbc:mysql://root:YCErNaZZalpDxpCcZ0YN@containers-us-west-150.railway.app:5783/railway}
+    url: ${JDBC_DATABASE_URL:jdbc:mysql://root:PivBBLXb4U9X9vfouEZz@containers-us-west-146.railway.app:7486/railway}
     username: ${JDBC_DATABASE_USERNAME:root}
-    password: ${JDBC_DATABASE_PASSWORD:YCErNaZZalpDxpCcZ0YN}
+    password: ${JDBC_DATABASE_PASSWORD:PivBBLXb4U9X9vfouEZz}
     dbcp2:
       max-wait-millis: 30000
       validation-query: /* ping */ select 1
