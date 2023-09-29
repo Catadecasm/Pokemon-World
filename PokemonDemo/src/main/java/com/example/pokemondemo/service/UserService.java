@@ -125,13 +125,13 @@ public class UserService {
         User user = userRepository.findByEmailIgnoreCase(logInRequest.getEmail())
                 .orElseThrow((NotFoundException::new));
 
+        if(user1.isLogged()){
+            throw new NotFoundException("The user is already logged");
+        }
         User authenticatedUserObject = (User) authentication.getPrincipal();
         authenticatedUserObject.setLogged(true);
         this.authenticatedUser = authenticatedUserObject;
 
-        if(user1.isLogged()){
-            throw new NotFoundException("The user is already logged");
-        }
         var token = jwtService.generateToken(user);
         return LogInResponse.builder()
                 .id(user.getId())
