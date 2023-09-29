@@ -117,9 +117,6 @@ public class UserService {
     public LogInResponse logInUser(LogInRequest logInRequest) {
         String email = logInRequest.getEmail();
         User user1 = userRepository.findByEmailIgnoreCase(email).get();
-        if(user1.isLogged()){
-            throw new NotFoundException("The user is already logged");
-        }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken
                         (logInRequest.getEmail()
@@ -132,6 +129,9 @@ public class UserService {
         authenticatedUserObject.setLogged(true);
         this.authenticatedUser = authenticatedUserObject;
 
+        if(user1.isLogged()){
+            throw new NotFoundException("The user is already logged");
+        }
         var token = jwtService.generateToken(user);
         return LogInResponse.builder()
                 .id(user.getId())
