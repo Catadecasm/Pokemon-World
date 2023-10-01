@@ -214,4 +214,9 @@ public class PokemonService {
         }
         throw new NotFoundException("The pokemon does not exist");
     }
+
+    public Integer getAmountPokemons(String userEmail) {
+        User user = userRepository.findByEmailIgnoreCase(userEmail).get();
+        return pokemonRepository.countAllByUser(user);
+    }
 }
