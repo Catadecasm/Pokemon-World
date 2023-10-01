@@ -132,6 +132,8 @@ public class UserService {
         authenticatedUserObject.setLogged(true);
         this.authenticatedUser = authenticatedUserObject;
 
+        user.setLogged(true);
+        userRepository.save(user);
         var token = jwtService.generateToken(user);
         return LogInResponse.builder()
                 .id(user.getId())
