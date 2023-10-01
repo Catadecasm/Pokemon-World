@@ -27,8 +27,7 @@ public class PokemonResource {
         this.jwtService = jwtService;
     }
     @GetMapping("/getAmountPokemons")
-    public ResponseEntity<?> getAmountPokemons(HttpServletRequest request){
-        String header = request.getHeader("Authorization");
+    public ResponseEntity<?> getAmountPokemons(@RequestHeader("Authorization") String header){
         String jwt = header.substring(7);
         String userEmail = jwtService.getUserEmail(jwt);
         return ResponseEntity.ok(pokemonService.getAmountPokemons(userEmail));

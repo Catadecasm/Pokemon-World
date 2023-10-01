@@ -26,8 +26,7 @@ public class UserResource {
         this.jwtService = jwtService;
     }
     @GetMapping("/get-user")
-    public ResponseEntity<?> getuser(HttpServletRequest request){
-        String header = request.getHeader("Authorization");
+    public ResponseEntity<?> getuser(@RequestHeader("Authorization") String header){
         String token = header.substring(7);
         String userEmail = jwtService.getUserEmail(token);
         return ResponseEntity.ok(userService.getuser(userEmail));
