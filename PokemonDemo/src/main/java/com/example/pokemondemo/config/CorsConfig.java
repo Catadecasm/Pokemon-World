@@ -15,7 +15,6 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         // Configurar los detalles CORS según tus necesidades
         config.addAllowedOrigin("*"); // Permitir solicitudes desde cualquier origen (esto es riesgoso en producción)
-        config.addAllowedOrigin("http://localhost:3000"); // Permitir solicitudes desde cualquier origen (esto es riesgoso en producción)
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
