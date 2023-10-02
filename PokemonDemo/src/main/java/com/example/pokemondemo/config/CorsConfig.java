@@ -18,9 +18,6 @@ public class CorsConfig {
         // Configurar los detalles CORS según tus necesidades
         config.addAllowedOrigin("*"); // Permitir solicitudes desde cualquier origen (esto es riesgoso en producción)
         config.addAllowedHeader("*");
-        config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedOrigins(List.of("*"));
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
