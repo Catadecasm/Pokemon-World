@@ -34,6 +34,14 @@ public class FightResource {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @GetMapping("/getAllinfoFights")
+    public ResponseEntity<?> getAmountsFights(HttpServletRequest request){
+        String header = request.getHeader("Authorization");
+        String jwt = header.substring(7);
+        String userEmail = jwtService.getUserEmail(jwt);
+        return ResponseEntity.ok(fightService.getAmountsFights(userEmail));
+
+    }
 
     @GetMapping("/get-fight/{username}")
     public ResponseEntity<?> getFight(@PathVariable final String username, @RequestParam(name = "quantity") Integer quantity, @RequestParam(name = "offset") Integer offset, HttpServletRequest request) {

@@ -3,17 +3,12 @@ package com.example.pokemondemo.service;
 
 import com.example.pokemondemo.entity.Fight;
 import com.example.pokemondemo.entity.User;
-import com.example.pokemondemo.model.dto.OpponentDTO;
-import com.example.pokemondemo.model.dto.FightListDTO;
-import com.example.pokemondemo.model.dto.FightResponseDTO;
-import com.example.pokemondemo.model.dto.FightResultDTO;
-import com.example.pokemondemo.model.dto.ResultDTO;
+import com.example.pokemondemo.model.dto.*;
 import com.example.pokemondemo.repository.FightRepository;
 import com.example.pokemondemo.repository.FollowRepository;
 import com.example.pokemondemo.repository.LeagueRepository;
 import com.example.pokemondemo.repository.UserRepository;
 import com.example.pokemondemo.exception.*;
-import com.example.pokemondemo.model.dto.FightDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +38,6 @@ public class FightService {
     }
 
 
-
     public void delete(final Integer id) {
         fightRepository.deleteById(id);
     }
@@ -51,23 +45,23 @@ public class FightService {
 
     public FightResponseDTO createFight(String userEmail, FightDTO fightDTO) {
         User user = userRepository.findByEmailIgnoreCase(userEmail).get();
-        if(!userRepository.existsByUsernameIgnoreCase(fightDTO.getOpponent_1().getUsername()) || !userRepository.existsByUsernameIgnoreCase(fightDTO.getOpponent_2().getUsername())){
+        if (!userRepository.existsByUsernameIgnoreCase(fightDTO.getOpponent_1().getUsername()) || !userRepository.existsByUsernameIgnoreCase(fightDTO.getOpponent_2().getUsername())) {
             throw new NotFoundException("One or both of the given trainers does not exist");
         }
-        if(!user.getRealUsername().equals(fightDTO.getOpponent_1().getUsername()) && !user.getRealUsername().equals(fightDTO.getOpponent_2().getUsername())){
+        if (!user.getRealUsername().equals(fightDTO.getOpponent_1().getUsername()) && !user.getRealUsername().equals(fightDTO.getOpponent_2().getUsername())) {
             throw new NotFoundException("The given fight is not a fight made by you");
         }
-        if(user.getRealUsername().equals(fightDTO.getOpponent_1().getUsername()) && user.getRealUsername().equals(fightDTO.getOpponent_2().getUsername())){
+        if (user.getRealUsername().equals(fightDTO.getOpponent_1().getUsername()) && user.getRealUsername().equals(fightDTO.getOpponent_2().getUsername())) {
             throw new NotFoundException("You can't fight yourself");
         }
-        if(!leagueRepository.existsByNameIgnoreCase(fightDTO.getLeague())){
+        if (!leagueRepository.existsByNameIgnoreCase(fightDTO.getLeague())) {
             throw new NotFoundException("The given league does not exist");
         }
 
-        if(user.getRealUsername().equals(fightDTO.getOpponent_1().getUsername())){
+        if (user.getRealUsername().equals(fightDTO.getOpponent_1().getUsername())) {
             User you = userRepository.findByUsernameIgnoreCase(fightDTO.getOpponent_1().getUsername());
             User opponent = userRepository.findByUsernameIgnoreCase(fightDTO.getOpponent_2().getUsername());
-            if(!you.getLeagueid().equals(opponent.getLeagueid())){
+            if (!you.getLeagueid().equals(opponent.getLeagueid())) {
                 throw new NotFoundException("You can't fight a trainer from a different league");
             }
             HashSet<User> users = new HashSet<User>();
@@ -91,10 +85,10 @@ public class FightService {
                     .updateAt(fight.getUpdatee().toString())
                     .build();
 
-        }else{
+        } else {
             User you = userRepository.findByUsernameIgnoreCase(fightDTO.getOpponent_2().getUsername());
             User opponent = userRepository.findByUsernameIgnoreCase(fightDTO.getOpponent_1().getUsername());
-            if(!you.getLeagueid().equals(opponent.getLeagueid())){
+            if (!you.getLeagueid().equals(opponent.getLeagueid())) {
                 throw new NotFoundException("You can't fight a trainer from a different league");
             }
             HashSet<User> users = new HashSet<User>();
@@ -125,28 +119,28 @@ public class FightService {
     public FightListDTO getFight(String username, Integer quantity, Integer offset, String userEmail) {
         User user = userRepository.findByEmailIgnoreCase(userEmail).get();
         User search = userRepository.findByUsernameIgnoreCase(username);
-        if(!userRepository.existsByUsernameIgnoreCase(username)){
+        if (!userRepository.existsByUsernameIgnoreCase(username)) {
             throw new NotFoundException("The given trainer does not exist");
         }
-        if(!user.getRealUsername().equals(username)){
-            if(followRepository.findFollowByFollowedAndFollower(search, user) == null){
+        if (!user.getRealUsername().equals(username)) {
+            if (followRepository.findFollowByFollowedAndFollower(search, user) == null) {
                 throw new NotFoundException("You are not following the given trainer");
-            }else{
+            } else {
                 Pageable pageable = PageRequest.of(offset, quantity);
                 List<Fight> fights = fightRepository.findAllByUserFightUsers(search, pageable);
-                FightListDTO fightListDTO =  new FightListDTO();
+                FightListDTO fightListDTO = new FightListDTO();
                 fightListDTO.setIndex(offset);
                 fightListDTO.setQuantity(quantity);
                 fightListDTO.setResult(new ArrayList<>());
-                for(Fight fight : fights){
+                for (Fight fight : fights) {
                     FightResultDTO resultDTO = new FightResultDTO();
                     resultDTO.setId(fight.getId());
                     resultDTO.setCreateAt(fight.getCreation().toString());
                     resultDTO.setUpdateAt(fight.getUpdatee().toString());
                     resultDTO.setLeague(fight.getLeague());
                     resultDTO.setResult(ResultDTO.builder()
-                                    .winner(fight.getWinnerName())
-                                    .rounds(fight.getRounds()).build());
+                            .winner(fight.getWinnerName())
+                            .rounds(fight.getRounds()).build());
                     resultDTO.setOpponent(OpponentDTO.builder()
                             .email(search.getEmail())
                             .username(search.getRealUsername())
@@ -156,14 +150,14 @@ public class FightService {
                 }
                 return fightListDTO;
             }
-        }else{
+        } else {
             Pageable pageable = PageRequest.of(offset, quantity);
             List<Fight> fights = fightRepository.findAllByUserFightUsers(user, pageable);
-            FightListDTO fightListDTO =  new FightListDTO();
+            FightListDTO fightListDTO = new FightListDTO();
             fightListDTO.setIndex(offset);
             fightListDTO.setQuantity(quantity);
             fightListDTO.setResult(new ArrayList<>());
-            for(Fight fight : fights){
+            for (Fight fight : fights) {
                 FightResultDTO resultDTO = new FightResultDTO();
                 resultDTO.setId(fight.getId());
                 resultDTO.setCreateAt(fight.getCreation().toString());
@@ -181,5 +175,13 @@ public class FightService {
             }
             return fightListDTO;
         }
+    }
+
+    public FightsInfoDTO getAmountsFights(String userEmail) {
+        User user = userRepository.findByEmailIgnoreCase(userEmail).get();
+        return FightsInfoDTO.builder()
+                .totalFights(fightRepository.countAllByUserId(user))
+                .totalWins(fightRepository.countAllByUserIdAndAndWinnerName(user,user.getRealUsername()))
+                .build();
     }
 }
