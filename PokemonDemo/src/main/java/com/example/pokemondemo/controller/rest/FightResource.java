@@ -34,7 +34,7 @@ public class FightResource {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping("/getAllinfoFights")
+    @GetMapping("/getAmountFights")
     public ResponseEntity<?> getAmountsFights(HttpServletRequest request){
         String header = request.getHeader("Authorization");
         String jwt = header.substring(7);

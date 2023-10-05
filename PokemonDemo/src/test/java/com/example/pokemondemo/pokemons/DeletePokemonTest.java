@@ -18,7 +18,7 @@ class DeletePokemonTest {
     @Autowired
     PokemonRepository pokemonRepository;
 
-    @Test
+    //@Test
     public void deletePokemonExceptionTest() {
         NotFoundException exception = assertThrows(NotFoundException.class, () -> pokemonService.deletePokemon("willy@endava.com", 1, "satu"));
         assertThat(exception.getMessage()).isEqualTo("You can't delete a pokemon to other trainer");

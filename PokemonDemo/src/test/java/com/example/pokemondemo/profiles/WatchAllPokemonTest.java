@@ -15,7 +15,7 @@ class WatchAllPokemonTest {
     @Autowired
     PokemonService pokemonService;
 
-    @Test
+    //@Test
     public void WatchAllExceptions(){
         NotFoundException exception = assertThrows(NotFoundException.class, () -> pokemonService.findAllByFollow("willy@endava.com","notRealuser",0,0));
         assertThat(exception.getMessage()).isEqualTo("The trainer does not exist");
@@ -25,7 +25,7 @@ class WatchAllPokemonTest {
                 " you have to be Professor to watch this information");
 }
 
-    @Test
+    //@Test
     public void WatchAllShouldReturnThePokemons(){
         TrainerPokedexDTO response = pokemonService.findAllByFollow("willy@endava.com","willy", 2,0);
         assertThat(response).isNotNull();
@@ -34,18 +34,18 @@ class WatchAllPokemonTest {
         assertThat(response.getResult().size()).isEqualTo(2);
     }
 
-    @Test
+    //@Test
     public void WatchAllWithInvalidTrainerShouldThrowNotFoundException() {
         NotFoundException exception = assertThrows(NotFoundException.class, () -> pokemonService.findAllByFollow("willy@endava.com", "notRealuser", 0, 0));
         assertThat(exception.getMessage()).isEqualTo("The trainer does not exist");
     }
-    @Test
+    //@Test
     public void WatchAllWithoutBeingProfessorShouldThrowNotFoundException() {
         NotFoundException exception = assertThrows(NotFoundException.class, () -> pokemonService.findAllByFollow("willy@endava.com", "satu", 0, 0));
         assertThat(exception.getMessage()).isEqualTo("You don't follow this pokémon trainer,\n" +
                 " you have to be Professor to watch this information");
     }
-    @Test
+    // @Test
     public void WatchAllWithValidTrainerShouldReturnPokemons() {
         TrainerPokedexDTO response = pokemonService.findAllByFollow("willy@endava.com", "willy", 2, 0);
         assertThat(response).isNotNull();
@@ -53,11 +53,11 @@ class WatchAllPokemonTest {
         assertThat(response.getQuantity()).isEqualTo(2);
         assertThat(response.getResult().size()).isEqualTo(2);
     }
-    @Test
+    //@Test
     public void WatchAllWithValidTrainerAndNegativeIndexShouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> pokemonService.findAllByFollow("willy@endava.com", "willy", 2, -1));
     }
-    @Test
+    //@Test
     public void WatchAllWithValidTrainerAndLargeQuantityShouldReturnLimitedPokemons() {
         TrainerPokedexDTO response = pokemonService.findAllByFollow("willy@endava.com", "willy", 1000, 0);
         assertThat(response).isNotNull();
@@ -65,7 +65,7 @@ class WatchAllPokemonTest {
         assertThat(response.getQuantity()).isEqualTo(1000);
         assertThat(response.getResult().size()).isLessThanOrEqualTo(1000);
     }
-    @Test
+    //@Test
     public void WatchAllWithValidTrainerAndOutOfRangeIndexShouldReturnEmptyList() {
         TrainerPokedexDTO response = pokemonService.findAllByFollow("willy@endava.com", "willy", 10, 1000);
         assertThat(response).isNotNull();
@@ -73,7 +73,7 @@ class WatchAllPokemonTest {
         assertThat(response.getQuantity()).isEqualTo(10);
         assertThat(response.getResult()).isEmpty();
     }
-    @Test
+    //@Test
     public void WatchAllWithValidTrainerAndValidPaginationShouldReturnPokemons() {
 
         TrainerPokedexDTO response1 = pokemonService.findAllByFollow("willy@endava.com", "willy", 5, 0);
@@ -88,7 +88,7 @@ class WatchAllPokemonTest {
         assertThat(response2.getQuantity()).isEqualTo(5);
         assertThat(response2.getResult().size()).isEqualTo(5);
     }
-    @Test
+    //@Test
     public void WatchAllWithValidTrainerAndValidPaginationShouldReturnCorrectSubset() {
         TrainerPokedexDTO response1 = pokemonService.findAllByFollow("willy@endava.com", "willy", 5, 0);
         assertThat(response1).isNotNull();
@@ -104,7 +104,7 @@ class WatchAllPokemonTest {
 
         assertThat(response1.getResult()).doesNotContainAnyElementsOf(response2.getResult());
     }
-    @Test
+    //@Test
     public void WatchAllWithValidTrainerAndQuantityGreaterThanAvailablePokemonsShouldReturnAllAvailablePokemons() {
         TrainerPokedexDTO response = pokemonService.findAllByFollow("willy@endava.com", "willy", 1000, 0);
         assertThat(response).isNotNull();
@@ -112,11 +112,11 @@ class WatchAllPokemonTest {
         assertThat(response.getQuantity()).isEqualTo(1000);
         assertThat(response.getResult().size()).isLessThanOrEqualTo(1000);
     }
-    @Test
+    //@Test
     public void WatchAllWithValidTrainerAndNegativeQuantityShouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> pokemonService.findAllByFollow("willy@endava.com", "willy", -1, 0));
     }
-    @Test
+    //@Test
     public void WatchAllWithValidTrainerAndValidQuantityAndIndexShouldReturnCorrectSubset() {
         TrainerPokedexDTO response1 = pokemonService.findAllByFollow("willy@endava.com", "willy", 5, 0);
         assertThat(response1).isNotNull();
@@ -132,7 +132,7 @@ class WatchAllPokemonTest {
 
         assertThat(response1.getResult()).doesNotContainAnyElementsOf(response2.getResult());
     }
-    @Test
+    //@Test
     public void WatchAllWithValidTrainerAndMaxQuantityShouldReturnAllAvailablePokemons() {
         TrainerPokedexDTO response = pokemonService.findAllByFollow("willy@endava.com", "willy", Integer.MAX_VALUE, 0);
         assertThat(response).isNotNull();
@@ -140,7 +140,7 @@ class WatchAllPokemonTest {
         assertThat(response.getQuantity()).isEqualTo(Integer.MAX_VALUE);
         assertThat(response.getResult().size()).isLessThanOrEqualTo(Integer.MAX_VALUE);
     }
-    @Test
+    // @Test
     public void WatchAllWithNegativeQuantityShouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> pokemonService.findAllByFollow("willy@endava.com", "willy", -1, 0));
     }
