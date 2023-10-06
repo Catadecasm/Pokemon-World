@@ -180,8 +180,9 @@ public class FightService {
     public FightsInfoDTO getAmountsFights(String userEmail) {
         User user = userRepository.findByEmailIgnoreCase(userEmail).get();
         return FightsInfoDTO.builder()
-                .totalFights(fightRepository.countAllByUserId(user))
-                .totalWins(fightRepository.countAllByUserIdAndAndWinnerName(user,user.getRealUsername()))
+                .totalFights(fightRepository.countAllByUserId(user.getId()))
+                .totalWins(fightRepository.countAllByUserIdAndWinnerName(user.getId(),user.getRealUsername()))
+                .totalLosses(fightRepository.countAllByUserId(user.getId()) - fightRepository.countAllByUserIdAndWinnerName(user.getId(),user.getRealUsername()))
                 .build();
     }
 }
