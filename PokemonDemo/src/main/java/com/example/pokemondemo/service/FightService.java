@@ -185,4 +185,5 @@ public class FightService {
                 .totalLosses(fightRepository.countAllByUserId(user.getId()) - fightRepository.countAllByUserIdAndWinnerName(user.getId(),user.getRealUsername()))
                 .build();
     }
+    
 }
